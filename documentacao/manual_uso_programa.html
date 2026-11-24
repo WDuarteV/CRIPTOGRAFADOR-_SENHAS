@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Manual de Uso do Programa (Passo a Passo) - Criptografador Dinâmico SO2</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 15mm 15mm 15mm 15mm;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    background-color: #ffffff;
+    line-height: 1.55;
+    font-size: 10pt;
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  h1, h2, h3, h4 {
+    color: #0f172a;
+    font-weight: 700;
+    margin-top: 0;
+  }
+  h1 {
+    font-size: 18pt;
+    color: #0f172a;
+    margin-bottom: 6px;
+  }
+  h2 {
+    font-size: 13.5pt;
+    color: #0369a1;
+    border-bottom: 2px solid #bae6fd;
+    padding-bottom: 4px;
+    margin-top: 18px;
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-size: 11pt;
+    color: #0f766e;
+    margin-top: 12px;
+    margin-bottom: 6px;
+  }
+  p {
+    margin: 0 0 8px 0;
+  }
+  ul, ol {
+    margin: 0 0 10px 0;
+    padding-left: 20px;
+  }
+  li {
+    margin-bottom: 4px;
+  }
+  .cover-banner {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: #f8fafc;
+    padding: 18px 22px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    border-left: 6px solid #38bdf8;
+  }
+  .cover-banner h1 {
+    color: #ffffff;
+    font-size: 17pt;
+    margin-bottom: 6px;
+  }
+  .cover-banner p {
+    color: #cbd5e1;
+    margin: 2px 0;
+    font-size: 9.8pt;
+  }
+  .step-box {
+    border: 1px solid #cbd5e1;
+    border-left: 5px solid #0284c7;
+    background: #f8fafc;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    page-break-inside: avoid;
+  }
+  .step-title {
+    font-weight: 700;
+    font-size: 10.5pt;
+    color: #0369a1;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .step-badge {
+    background: #0284c7;
+    color: #ffffff;
+    font-size: 8pt;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .tip-box {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-left: 4px solid #10b981;
+    padding: 9px 12px;
+    border-radius: 6px;
+    margin: 10px 0 4px 0;
+    font-size: 9.4pt;
+    color: #065f46;
+    page-break-inside: avoid;
+  }
+  pre, code {
+    font-family: "Consolas", "Fira Code", "Courier New", monospace;
+    font-size: 8.8pt;
+  }
+  code {
+    background: #e2e8f0;
+    color: #0f172a;
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 9px 12px;
+    border-radius: 6px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.42;
+    margin: 6px 0 10px 0;
+    page-break-inside: avoid;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0 14px 0;
+    font-size: 9.2pt;
+    page-break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid #cbd5e1;
+    padding: 6px 9px;
+    text-align: left;
+  }
+  th {
+    background: #f1f5f9;
+    color: #0f172a;
+    font-weight: 700;
+  }
+  tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+  .page-break {
+    page-break-before: always;
+  }
+</style>
+</head>
+<body>
+
+<div class="cover-banner">
+  <h1>📘 Manual de Uso do Programa — Passo a Passo Completo</h1>
+  <p><strong>Projeto:</strong> Criptografador e Descriptografador de Senhas Baseado em Dicionário Dinâmico</p>
+  <p><strong>Disciplina:</strong> Sistemas Operacionais II (Avaliação P1) • <strong>Instituição:</strong> FAETERJ Petrópolis</p>
+  <p><strong>Autor / Aluno:</strong> Wallace Duarte Venâncio • <strong>Semestre:</strong> 2026.2</p>
+</div>
+
+<h2>1. Visão Geral das 4 Formas de Uso do Sistema</h2>
+<p>
+O sistema foi projetado em camadas modulares independentes para permitir tanto a validação rigorosa via terminal exigida pelo edital quanto a exploração visual e interativa de telemetria. Você pode utilizar o programa de <strong>4 maneiras complementares</strong>:
+</p>
+<table>
+  <thead>
+    <tr>
+      <th>Modo de Uso</th>
+      <th>Comando Principal</th>
+      <th>Quando Utilizar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1. Painel Web Visual (Zero-Interference)</strong></td>
+      <td><code>./executar_interface.sh</code></td>
+      <td>Para demonstrações visuais, visualização do <em>Chunking</em> por worker, criptografia/descriptografia interativa e inspeção dos 3 gráficos.</td>
+    </tr>
+    <tr>
+      <td><strong>2. Binários Nativos C++ (CLI Direta)</strong></td>
+      <td><code>./threads/app 4 10000000 84729 AvaliacaoSO2</code></td>
+      <td>Para avaliação direta na banca, medição pura no terminal e validação de equivalência com <code>diff</code>.</td>
+    </tr>
+    <tr>
+      <td><strong>3. Assistente Interativo de Terminal</strong></td>
+      <td><code>python3 interface/cli_interativo.py</code></td>
+      <td>Para execução guiada passo a passo via perguntas no próprio terminal Linux.</td>
+    </tr>
+    <tr>
+      <td><strong>4. Scripts de Benchmark &amp; Docker</strong></td>
+      <td><code>./testes/benchmark_host.sh</code><br><code>./testes/benchmark_dock.sh</code></td>
+      <td>Para rodar automaticamente as 5 baterias científicas no Host e com limitação de CPU (<code>--cpus</code>) e gerar os CSVs/PNGs.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>2. Pré-Requisitos e Instalação de Dependências</h2>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Passo 1</span> Verificar ou instalar os pacotes essenciais do Linux e o Docker Engine</div>
+  <p>Abra o terminal na sua distribuição Linux e certifique-se de ter o compilador GNU C++ (<code>g++</code>), o utilitário <code>make</code>, o <code>python3</code> e o <code>docker</code> instalados e ativos:</p>
+  <p><strong>No Ubuntu / Debian / Linux Mint:</strong></p>
+  <pre>sudo apt update &amp;&amp; sudo apt install -y build-essential g++ make python3 python3-matplotlib docker.io
+sudo systemctl enable --now docker
+sudo usermod -aG docker $USER</pre>
+  <p><strong>No Arch Linux / Manjaro:</strong></p>
+  <pre>sudo pacman -S --needed base-devel gcc make python python-matplotlib docker
+sudo systemctl enable --now docker
+sudo usermod -aG docker $USER</pre>
+  <p><strong>No Fedora / RHEL:</strong></p>
+  <pre>sudo dnf install -y gcc-c++ make python3 python3-matplotlib docker
+sudo systemctl enable --now docker
+sudo usermod -aG docker $USER</pre>
+</div>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Passo 2</span> Acessar a pasta raiz do projeto</div>
+  <p>Navegue pelo terminal até a pasta principal onde estão os módulos do projeto:</p>
+  <pre>cd "/home/doublew/PROJETO SO2"</pre>
+</div>
+
+<h2>3. Passo a Passo: Compilação dos Motores C++</h2>
+<p>
+Cada um dos três paradigmas possui seu próprio diretório isolado (<code>/sequencial</code>, <code>/processos</code> e <code>/threads</code>) com um <code>Makefile</code> configurado com otimização máxima (<code>-O3 -std=c++17 -Wall -Wextra</code> e <code>-pthread</code>).
+</p>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Passo Único</span> Compilar os 3 módulos de forma limpa</div>
+  <p>Execute os comandos abaixo a partir da raiz do projeto para limpar binários antigos e recompilar os três executáveis nativos:</p>
+  <pre>make -C sequencial clean all
+make -C processos clean all
+make -C threads clean all</pre>
+  <ul>
+    <li><code>./sequencial/app</code> — Motor monothread de referência (Baseline).</li>
+    <li><code>./processos/app</code> — Motor multiprocesso com <code>fork()</code>, <code>mmap(MAP_SHARED)</code> e <code>waitpid()</code>.</li>
+    <li><code>./threads/app</code> — Motor multithread com <code>std::thread</code>, <code>std::mutex</code> e <code>.join()</code>.</li>
+  </ul>
+</div>
+
+<div class="page-break"></div>
+
+<h2>4. Passo a Passo: Execução Direta dos Binários C++ no Terminal</h2>
+
+<h3>4.1. Sintaxe Unificada de Linha de Comando (CLI)</h3>
+<p>Todos os três executáveis obedecem rigorosamente à mesma assinatura dinâmica (sem valores fixos travados no código):</p>
+<pre>./&lt;modulo&gt;/app &lt;workers&gt; [tamanho] [chave] [senha]</pre>
+
+<table>
+  <thead>
+    <tr>
+      <th>Ordem</th>
+      <th>Parâmetro</th>
+      <th>Obrigatório?</th>
+      <th>Valor Padrão</th>
+      <th>Descrição</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>argv[1]</code></td>
+      <td><code>&lt;workers&gt;</code></td>
+      <td><strong>Sim</strong> (em processos/threads)</td>
+      <td><code>1</code> (no sequencial)</td>
+      <td>Quantidade de fluxos concorrentes (P &isin; {1, 2, 4, 8}).</td>
+    </tr>
+    <tr>
+      <td><code>argv[2]</code></td>
+      <td><code>[tamanho]</code></td>
+      <td>Opcional</td>
+      <td><code>10000000</code></td>
+      <td>Total de entradas N do dicionário (10 milhões = 320 MB).</td>
+    </tr>
+    <tr>
+      <td><code>argv[3]</code></td>
+      <td><code>[chave]</code></td>
+      <td>Opcional</td>
+      <td><code>84729</code></td>
+      <td>Semente numérica secreta para as 50 iterações modulares.</td>
+    </tr>
+    <tr>
+      <td><code>argv[4]</code></td>
+      <td><code>[senha]</code></td>
+      <td>Opcional</td>
+      <td><code>"AvaliacaoSO2"</code></td>
+      <td>Senha em texto claro a ser criptografada e descriptografada.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Exemplo 1</span> Executar a Versão Sequencial (Baseline Oficial)</div>
+  <pre>./sequencial/app 1 10000000 84729 AvaliacaoSO2</pre>
+  <p><strong>O que acontece:</strong> Aloca 320 MB, calcula as 10.000.000 de posições em um único fluxo (~3,86 segundos), exibe o Checksum (<code>5000000903112875</code>), a senha criptografada e a senha descriptografada.</p>
+</div>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Exemplo 2</span> Executar a Versão Paralela com 4 Processos (POSIX IPC)</div>
+  <pre>./processos/app 4 10000000 84729 AvaliacaoSO2</pre>
+  <p><strong>O que acontece:</strong> Mapeia 320 MB via <code>mmap(MAP_SHARED)</code>, cria 4 processos filhos via <code>fork()</code> (cada um processando 2.500.000 posições), sincroniza o checksum com <code>pthread_mutex_t (PTHREAD_PROCESS_SHARED)</code>, aguarda com <code>waitpid()</code> e conclui em ~1,81 segundos.</p>
+</div>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Exemplo 3</span> Executar a Versão Paralela com 4 ou 8 Threads (C++17)</div>
+  <pre>./threads/app 4 10000000 84729 AvaliacaoSO2
+./threads/app 8 10000000 84729 AvaliacaoSO2</pre>
+  <p><strong>O que acontece:</strong> Instancia 4 ou 8 threads via <code>std::thread</code> compartilhando o espaço de endereçamento, protege o checksum global com <code>std::mutex</code>, aguarda via <code>.join()</code> e reduz o tempo para ~1,77 s (4w) e ~1,12 s (8w — Speedup de 3,44x).</p>
+</div>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Exemplo 4</span> Validar a Equivalência Estrita de Saída com <code>diff</code> (Requisito da Banca)</div>
+  <p>Para comprovar que as versões Sequencial, Processos e Threads produzem exatamente o mesmo resultado bit a bit:</p>
+  <pre>diff -u &lt;(./sequencial/app 1 10000000 84729 AvaliacaoSO2 | sed -n "/\[RESULTADOS\]/,/\[TELEMETRIA\]/p") \
+        &lt;(./processos/app 4 10000000 84729 AvaliacaoSO2 | sed -n "/\[RESULTADOS\]/,/\[TELEMETRIA\]/p")
+
+diff -u &lt;(./sequencial/app 1 10000000 84729 AvaliacaoSO2 | sed -n "/\[RESULTADOS\]/,/\[TELEMETRIA\]/p") \
+        &lt;(./threads/app 4 10000000 84729 AvaliacaoSO2 | sed -n "/\[RESULTADOS\]/,/\[TELEMETRIA\]/p")</pre>
+  <p><strong>Resultado esperado:</strong> Nenhuma linha de diferença (código de retorno <code>0</code>), confirmando identidade absoluta.</p>
+</div>
+
+<div class="page-break"></div>
+
+<h2>5. Passo a Passo: Uso do Painel Visual Web (Zero-Interference UI)</h2>
+<p>
+O projeto conta com uma interface web local construída para demonstrar visualmente o paralelismo sem interferir nos núcleos da CPU durante as medições.
+</p>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Passo 1</span> Iniciar o Painel Visual</div>
+  <p>Na raiz do projeto, execute o script de inicialização:</p>
+  <pre>./executar_interface.sh</pre>
+  <p><em>(Alternativamente, você pode rodar diretamente <code>python3 interface/server.py 5000</code> e abrir <code>http://localhost:5000</code> no navegador).</em></p>
+</div>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Passo 2</span> Aba 1 — Execução Paralela, Chunking &amp; Cifragem</div>
+  <ol>
+    <li>Escolha o <strong>Paradigma de Sistema Operacional</strong> (<code>Sequencial</code>, <code>Threads</code> ou <code>Processos</code>).</li>
+    <li>Selecione a quantidade de <strong>Workers Concorrentes (P)</strong> (<code>1</code>, <code>2</code>, <code>4</code> ou <code>8</code>).</li>
+    <li>Selecione o <strong>Limite de CPU (Cgroups / Docker)</strong>: deixe em <code>Host Físico</code> para velocidade máxima ou escolha <code>--cpus="1"</code>, <code>"2"</code> ou <code>"4"</code> para simular a restrição de hardware do container.</li>
+    <li>Informe o <strong>Tamanho do Dicionário (N)</strong> (padrão oficial: <code>10.000.000</code>), a <strong>Chave Modular (K)</strong> e a <strong>Senha</strong>.</li>
+    <li>Clique em <strong>"🚀 Executar Motor C++ Paralelo &amp; Medir Speedup"</strong>.</li>
+    <li>Observe no painel direito o <strong>Tempo de Geração</strong>, <strong>Tempo Total</strong>, <strong>Speedup (S<sub>p</sub>)</strong>, <strong>Eficiência (E<sub>p</sub>)</strong>, <strong>Checksum Global</strong> e, logo abaixo, o diagrama de <strong>Decomposição de Domínio (Chunking)</strong> mostrando o intervalo exato <code>[start, end)</code> de cada worker e a tabela indicando qual Worker gerou o token de cada letra da senha!</li>
+  </ol>
+</div>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Passo 3</span> Aba 2 — Descriptografia Reversa no Dicionário</div>
+  <ol>
+    <li>Na Aba 1, após cifrar uma senha, clique no botão <strong>"➔ Inspecionar Reversão"</strong> (ou acesse diretamente a Aba 2 e clique em <strong>"📋 Carregar Última Senha Cifrada"</strong>).</li>
+    <li>Clique em <strong>"🔓 Executar Descriptografia Reversa &amp; Mapear Partições"</strong>.</li>
+    <li>O sistema exibirá a <strong>Senha Original Reconstituída</strong> e uma tabela detalhando cada token recebido, o valor numérico após as 50 iterações, o código ASCII, o índice exato no dicionário e <strong>qual Worker paralelo (W<sub>p</sub>) detém aquela fatia de memória</strong>.</li>
+  </ol>
+</div>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Passo 4</span> Aba 3 — Os 3 Gráficos Obrigatórios &amp; Benchmark (Host vs. Docker)</div>
+  <ol>
+    <li>Ao abrir a Aba 3, o sistema já carrega automaticamente os dados oficiais das <strong>135 execuções (5 repetições por cenário com N=10.000.000)</strong>.</li>
+    <li>Analise os <strong>3 Gráficos Obrigatórios</strong> exigidos pelo professor:
+      <ul>
+        <li><strong>Gráfico 1:</strong> Tempo de Execução (s) por Workers (1, 2, 4, 8) comparando Sequencial, Processos e Threads.</li>
+        <li><strong>Gráfico 2:</strong> Curva de Speedup Real (S<sub>p</sub>) vs. Speedup Linear Ideal (y = x) demonstrando a Lei de Amdahl.</li>
+        <li><strong>Gráfico 3:</strong> Host Físico vs. Container Docker / Cgroups (<code>--cpus="1"</code>, <code>"2"</code>, <code>"4"</code>).</li>
+      </ul>
+    </li>
+    <li>Caso deseje rodar uma nova bateria ao vivo na hora, selecione o tamanho desejado e clique em <strong>"⚡ Executar Bateria ao Vivo no Kernel"</strong>.</li>
+  </ol>
+</div>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Passo 5</span> Aba 4 — Terminal CLI &amp; Validação Automática <code>diff</code></div>
+  <p>Clique no botão verde <strong>"✔ Validar Equivalência Estrita (diff Seq vs. Proc vs. Threads)"</strong> para executar os três binários simultaneamente e comprovar com <code>diff</code> zero que as saídas de <code>./sequencial/app</code>, <code>./processos/app 4</code> e <code>./threads/app 4</code> são idênticas.</p>
+</div>
+
+<div class="page-break"></div>
+
+<h2>6. Passo a Passo: Uso do Modo CLI Interativo no Terminal</h2>
+<p>Se estiver em uma sessão puramente de terminal (SSH ou sem navegador) e quiser um menu interativo passo a passo:</p>
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Comando</span> Iniciar o assistente interativo em Python</div>
+  <pre>python3 interface/cli_interativo.py</pre>
+  <p>O assistente fará 4 perguntas simples (com valores padrão caso pressione apenas <code>Enter</code>):</p>
+  <ol>
+    <li><strong>Senha a ser criptografada</strong> (Padrão: <code>AvaliacaoSO2</code>).</li>
+    <li><strong>Paradigma de execução</strong> (<code>1 = Sequencial</code>, <code>2 = Threads</code>, <code>3 = Processos</code>).</li>
+    <li><strong>Quantidade de workers</strong> (<code>1, 2, 4 ou 8</code> — Padrão: <code>4</code>).</li>
+    <li><strong>Tamanho do dicionário</strong> (<code>1 = 1.000.000</code>, <code>2 = 10.000.000</code> — Padrão: <code>2</code>).</li>
+  </ol>
+  <p>Em seguida, ele executa o motor C++, mostra a tabela de telemetria e pergunta se deseja realizar a descriptografia reversa imediata.</p>
+</div>
+
+<h2>7. Passo a Passo: Uso do Container Docker (<code>/container/Dockerfile</code>) e Limitação de CPU (<code>--cpus</code>)</h2>
+<p>
+O projeto possui o módulo completo de containerização em <code>/container</code> (contendo <code>Dockerfile</code>, <code>run_docker.sh</code> e <code>README.md</code>). Abaixo está o passo a passo completo tanto via comandos nativos do Docker quanto via script automatizado:
+</p>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Passo 1</span> Iniciar o Serviço do Docker (Daemon) no Linux</div>
+  <p>Antes de construir ou rodar o container, certifique-se de que o serviço do Docker está iniciado e ativo:</p>
+  <pre># Inicia o serviço do Docker imediatamente e habilita no boot
+sudo systemctl start docker
+sudo systemctl status docker --no-pager</pre>
+</div>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Passo 2</span> Construir a Imagem Docker do Projeto (<code>docker build</code>)</div>
+  <p>A partir da pasta raiz do projeto, execute o comando de build utilizando o arquivo <code>container/Dockerfile</code> (baseado em <code>ubuntu:24.04</code>, que copia os módulos e compila automaticamente <code>sequencial</code>, <code>processos</code> e <code>threads</code> com <code>-O3</code>):</p>
+  <pre>docker build -t projeto-so2 -f container/Dockerfile .
+
+# Verificar se a imagem 'projeto-so2' foi criada:
+docker images | grep projeto-so2</pre>
+</div>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Passo 3</span> Iniciar e Executar o Container com Limitação de CPU (<code>docker run --cpus</code>)</div>
+  <p>Execute diretamente os comandos exigidos na especificação do professor para testar o escalonador CFS do Kernel Linux sob restrição de 1, 2 e 4 núcleos:</p>
+  <pre># 1. Executar 4 Processos restritos a apenas 1 CPU (--cpus="1")
+docker run --rm --cpus="1" projeto-so2 ./processos/app 4 10000000 84729 AvaliacaoSO2
+
+# 2. Executar 8 Threads restritas a apenas 1 CPU (--cpus="1" - Alta Contenção)
+docker run --rm --cpus="1" projeto-so2 ./threads/app 8 10000000 84729 AvaliacaoSO2
+
+# 3. Executar 4 Threads restritas a 2 CPUs (--cpus="2")
+docker run --rm --cpus="2" projeto-so2 ./threads/app 4 10000000 84729 AvaliacaoSO2
+
+# 4. Executar 8 Threads restritas a 4 CPUs (--cpus="4")
+docker run --rm --cpus="4" projeto-so2 ./threads/app 8 10000000 84729 AvaliacaoSO2</pre>
+</div>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Passo 4</span> Alternativa Automatizada via Script Wrapper (<code>./container/run_docker.sh</code>)</div>
+  <p>Você também pode usar o script orquestrador <code>./container/run_docker.sh</code>, que verifica se a imagem <code>projeto-so2</code> já existe (fazendo o <code>docker build</code> automático caso necessário) e executa o <code>docker run --rm --cpus="..."</code>:</p>
+  <pre>./container/run_docker.sh 1 processos 4 10000000 84729 AvaliacaoSO2
+./container/run_docker.sh 2 threads 4 10000000 84729 AvaliacaoSO2
+./container/run_docker.sh 4 threads 8 10000000 84729 AvaliacaoSO2</pre>
+  <div class="tip-box">
+    <strong>Nota Técnica de Portabilidade:</strong> Se o daemon do Docker estiver ativo, o script executa <code>docker build</code> + <code>docker run --rm --cpus="..." projeto-so2</code>. Caso seja executado em uma máquina de laboratório onde o daemon do Docker não esteja instalado, o script aciona automaticamente o subsistema nativo <strong>cgroups v2 do Kernel Linux</strong> via <code>systemd-run --user --scope -p CPUQuota=...</code> e <code>taskset</code>, aplicando exatamente a mesma restrição física de quota no escalonador CFS!
+  </div>
+</div>
+
+<div class="step-box">
+  <div class="step-title"><span class="step-badge">Passo 5</span> Reexecutar as Baterias de 5 Execuções e Regerar os 3 Gráficos PNG</div>
+  <p>Para rodar novamente toda a coleta experimental (Host + Docker) e atualizar os arquivos em <code>/testes/resultados/</code>:</p>
+  <pre># 1. Coleta de 5 execuções por cenário no Host Físico (gera tempos_host.csv)
+./testes/benchmark_host.sh 10000000 84729 AvaliacaoSO2
+
+# 2. Coleta de 5 execuções por cenário sob --cpus 1, 2 e 4 (gera tempos_docker.csv)
+./testes/benchmark_dock.sh 10000000 84729 AvaliacaoSO2
+
+# 3. Cálculo de média, desvio padrão, speedup e geração dos 3 gráficos .png
+python3 testes/plot_graficos.py</pre>
+</div>
+
+<h2>8. Mapa de Arquivos Gerados e Entregáveis</h2>
+<ul>
+  <li><code>/sequencial/app</code>, <code>/processos/app</code>, <code>/threads/app</code> — Binários C++ compilados com <code>-O3</code>.</li>
+  <li><code>/testes/resultados/tempos_host.csv</code> e <code>tempos_docker.csv</code> — Dados brutos das 135 execuções.</li>
+  <li><code>/testes/resultados/resumo_estatistico.csv</code> — Médias (&mu;), desvios padrões (&sigma;), Speedup (S<sub>p</sub>) e Eficiência (E<sub>p</sub>).</li>
+  <li><code>/testes/resultados/grafico1_tempo.png</code>, <code>grafico2_speedup.png</code>, <code>grafico3_docker.png</code> — Os 3 gráficos obrigatórios.</li>
+  <li><code>/documentacao/apresentacao.pdf</code> — Slides cobrindo os 10 tópicos obrigatórios da defesa oral.</li>
+  <li><code>/documentacao/manual_uso_programa.pdf</code> — Este manual prático passo a passo.</li>
+  <li><code>/documentacao/passos_e_decisoes_engenharia_so2.pdf</code> — Documento completo de arquitetura e justificativa de todas as escolhas adotadas.</li>
+</ul>
+
+</body>
+</html>

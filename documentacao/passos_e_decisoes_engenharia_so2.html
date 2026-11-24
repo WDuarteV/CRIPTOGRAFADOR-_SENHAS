@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Todos os Passos do Projeto e o Porquê de Todas as Escolhas Adotadas - SO2</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 15mm 15mm 15mm 15mm;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    background-color: #ffffff;
+    line-height: 1.55;
+    font-size: 9.9pt;
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  h1, h2, h3, h4 {
+    color: #0f172a;
+    font-weight: 700;
+    margin-top: 0;
+  }
+  h1 {
+    font-size: 17pt;
+    margin-bottom: 6px;
+  }
+  h2 {
+    font-size: 13pt;
+    color: #1e40af;
+    border-bottom: 2px solid #93c5fd;
+    padding-bottom: 4px;
+    margin-top: 16px;
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-size: 11pt;
+    color: #0f766e;
+    margin-top: 12px;
+    margin-bottom: 5px;
+  }
+  p {
+    margin: 0 0 8px 0;
+    text-align: justify;
+  }
+  ul, ol {
+    margin: 0 0 10px 0;
+    padding-left: 20px;
+  }
+  li {
+    margin-bottom: 4px;
+  }
+  .cover-banner {
+    background: linear-gradient(135deg, #0f172a 0%, #312e81 100%);
+    color: #f8fafc;
+    padding: 18px 22px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    border-left: 6px solid #a855f7;
+  }
+  .cover-banner h1 {
+    color: #ffffff;
+    font-size: 16.5pt;
+    margin-bottom: 6px;
+  }
+  .cover-banner p {
+    color: #cbd5e1;
+    margin: 2px 0;
+    font-size: 9.6pt;
+    text-align: left;
+  }
+  .decision-card {
+    border: 1px solid #cbd5e1;
+    border-left: 5px solid #2563eb;
+    background: #f8fafc;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 11px;
+    page-break-inside: avoid;
+  }
+  .decision-card.purple {
+    border-left-color: #7c3aed;
+  }
+  .decision-card.emerald {
+    border-left-color: #059669;
+  }
+  .decision-card.amber {
+    border-left-color: #d97706;
+  }
+  .decision-title {
+    font-weight: 700;
+    font-size: 10.6pt;
+    color: #1e3a8a;
+    margin-bottom: 5px;
+  }
+  .why-badge {
+    display: inline-block;
+    background: #dbeafe;
+    color: #1e40af;
+    font-size: 8pt;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-right: 6px;
+    text-transform: uppercase;
+  }
+  pre, code {
+    font-family: "Consolas", "Fira Code", "Courier New", monospace;
+    font-size: 8.6pt;
+  }
+  code {
+    background: #e2e8f0;
+    color: #0f172a;
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  pre {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 9px 12px;
+    border-radius: 6px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.4;
+    margin: 6px 0 10px 0;
+    page-break-inside: avoid;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0 14px 0;
+    font-size: 8.8pt;
+    page-break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid #cbd5e1;
+    padding: 5px 8px;
+    text-align: left;
+  }
+  th {
+    background: #f1f5f9;
+    color: #0f172a;
+    font-weight: 700;
+  }
+  tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+  .chart-figure {
+    text-align: center;
+    margin: 12px 0;
+    page-break-inside: avoid;
+  }
+  .chart-figure img {
+    max-width: 96%;
+    height: auto;
+    border: 1px solid #94a3b8;
+    border-radius: 6px;
+  }
+  .chart-caption {
+    font-size: 8.8pt;
+    color: #475569;
+    margin-top: 4px;
+    font-style: italic;
+    text-align: center;
+  }
+  .page-break {
+    page-break-before: always;
+  }
+</style>
+</head>
+<body>
+
+<div class="cover-banner">
+  <h1>🏛️ Memorial Descritivo de Engenharia: Todos os Passos do Projeto e o Porquê de Todas as Escolhas Adotadas</h1>
+  <p><strong>Projeto:</strong> Criptografador de Senhas Baseado em Dicionário Dinâmico em C++</p>
+  <p><strong>Disciplina:</strong> Sistemas Operacionais II (Avaliação P1) • <strong>Instituição:</strong> FAETERJ Petrópolis</p>
+  <p><strong>Autor / Aluno:</strong> Wallace Duarte Venâncio • <strong>Semestre:</strong> 2026.2</p>
+</div>
+
+<h2>Parte I — Linha do Tempo: Todos os Passos Executados no Projeto</h2>
+<p>
+O desenvolvimento do projeto seguiu uma metodologia rigorosa de Engenharia de Sistemas Operacionais dividida em <strong>7 etapas sequenciais e rastreáveis</strong>, transformando a proposta inicial em uma arquitetura homologada sem nenhuma incongruência frente ao edital do professor:
+</p>
+
+<ol>
+  <li><strong>Passo 1 — Diagnóstico Técnico da Proposta Inicial vs. Edital:</strong> Identificamos 5 limitações nos rascunhos preliminares: (a) parâmetros fixos no código (<em>hardcoding</em>), (b) ausência de região crítica explícita além de <code>wait()</code>/<code>join()</code>, (c) assimetria de estrutura de dados (<code>std::vector&lt;std::string&gt;</code> em Sequencial/Threads vs. <code>struct EntradaDic</code> em Processos), (d) assimetria no ponto de início do cronômetro <code>std::chrono</code> e (e) ausência dos scripts de automação Docker (<code>--cpus</code>) e dos 3 gráficos.</li>
+  <li><strong>Passo 2 — Estruturação Canônica e Baseline Sequencial (<code>/sequencial</code>):</strong> Criamos a árvore oficial de diretórios (<code>/sequencial</code>, <code>/processos</code>, <code>/threads</code>, <code>/container</code>, <code>/testes</code> e <code>/documentacao</code>) e implementamos <code>/sequencial/main.cpp</code> com parser dinâmico via <code>argc/argv</code>, buffer contíguo de 320 MB, cálculo de checksum de 64 bits, cifragem e descriptografia reversa em memória, atingindo <strong>T<sub>seq</sub> = 3,9228 s &ge; 2,0 s</strong> sob <code>g++ -O3</code>.</li>
+  <li><strong>Passo 3 — Implementação Concorrente com Processos e Memória Compartilhada (<code>/processos</code>):</strong> Implementamos <code>/processos/main.cpp</code> utilizando <code>mmap(..., MAP_SHARED | MAP_ANONYMOUS, ...)</code> tanto para o dicionário (320 MB) quanto para a estrutura <code>ControleCompartilhado</code> contendo o <code>pthread_mutex_t</code> configurado com <code>PTHREAD_PROCESS_SHARED</code>, criação de filhos via <code>fork()</code>, barreira com <code>waitpid()</code> e liberação com <code>munmap()</code>.</li>
+  <li><strong>Passo 4 — Implementação Paralela com Multithreading (<code>/threads</code>):</strong> Implementamos <code>/threads/main.cpp</code> instanciando fluxos leves via <code>std::thread</code> sobre o mesmo espaço de endereçamento virtual, protegendo a soma do <code>checksum_global</code> com <code>std::mutex</code> (<code>std::lock_guard</code>) e barreira <code>.join()</code>, validando equivalência bit a bit (<code>diff = 0</code>) entre as 3 versões.</li>
+  <li><strong>Passo 5 — Containerização e Isolamento de Recursos via Cgroups (<code>/container</code>):</strong> Construímos o <code>Dockerfile</code> (<code>ubuntu:24.04</code>) e o orquestrador <code>run_docker.sh</code> para impor cotas estritas de CPU (<code>--cpus="1"</code>, <code>"2"</code> e <code>"4"</code>) no escalonador CFS do Kernel Linux.</li>
+  <li><strong>Passo 6 — Execução das 135 Baterias Experimentais e Geração dos 3 Gráficos (<code>/testes</code>):</strong> Desenvolvemos e executamos <code>benchmark_host.sh</code> (45 execuções no Host) e <code>benchmark_dock.sh</code> (90 execuções sob limitação de CPU), consolidando média (&mu;), desvio padrão (&sigma;), Speedup (S<sub>p</sub>) e Eficiência (E<sub>p</sub>) via <code>plot_graficos.py</code> nos 3 gráficos oficiais.</li>
+  <li><strong>Passo 7 — Reformulação da Interface Visual Web (Zero-Interference CSS) e Documentação (<code>/interface</code> e <code>/documentacao</code>):</strong> Reformulamos a interface web eliminando filtros pesados de composição gráfica que disputavam CPU com o C++, adicionando o visualizador de <em>Chunking</em> por Worker e gerando os slides e manuais em PDF.</li>
+</ol>
+
+<div class="page-break"></div>
+
+<h2>Parte II — O Porquê de Todas as Escolhas Adotadas (Justificativas de Engenharia)</h2>
+
+<div class="decision-card">
+  <div class="decision-title"><span class="why-badge">Escolha 01</span> Por que adotamos <code>struct EntradaDic { char valor[32]; }</code> Contíguo em vez de <code>std::vector&lt;std::string&gt;</code>?</div>
+  <p><strong>O Problema Oculto no <code>std::vector&lt;std::string&gt;</code>:</strong> Na versão preliminar, Sequencial e Threads utilizavam <code>std::vector&lt;std::string&gt;</code> enquanto Processos utilizava <code>struct EntradaDic</code>. Essa escolha inicial causava dois problemas graves de Sistemas Operacionais:</p>
+  <ol>
+    <li><strong>Contenção de Lock no Alocador de Heap (<code>glibc ptmalloc2</code>):</strong> Cada objeto <code>std::string</code> que aloca memória dinâmica invoca <code>malloc()</code> internamente. O alocador da biblioteca padrão C protege suas arenas de memória com travas internas (<em>mutexes de arena</em>). Quando 4 ou 8 threads tentam executar 10.000.000 de alocações simultâneas, elas ficam bloqueadas disputando o lock do <code>malloc</code> no kernel, mascarando o paralelismo!</li>
+    <li><strong>Incompatibilidade com Memória Compartilhada (<code>mmap</code>):</strong> Um <code>std::string</code> armazena internamente um ponteiro para o heap privado do processo que o criou. Se um processo filho gravasse um <code>std::string</code> dentro de uma região <code>mmap</code>, o ponteiro apontaria para o espaço privado do filho (inválido para o processo pai, causando <em>Segmentation Fault</em>).</li>
+  </ol>
+  <p><strong>Por que nossa escolha resolve:</strong> Ao padronizar <code>struct EntradaDic { char valor[32]; }</code> nas três versões, reservamos um único bloco contíguo de <strong>320 MB</strong> (<code>10.000.000 &times; 32 bytes</code>) antes do laço crítico. Dentro do laço, formatamos a string em um buffer na <em>stack</em> local (<code>char buffer_tmp[32]</code> via <code>std::snprintf</code>) e copiamos os caracteres invertidos diretamente para <code>dicionario[i].valor</code>. Há <strong>zero chamadas a <code>malloc</code></strong> durante o processamento paralelo e equivalência binária absoluta entre as 3 versões.</p>
+</div>
+
+<div class="decision-card purple">
+  <div class="decision-title"><span class="why-badge">Escolha 02</span> Por que N = 10.000.000 de posições com 50 iterações modulares por índice?</div>
+  <p><strong>O Porquê da Calibração Matemática:</strong> O edital exige que o código sequencial compilado com otimização máxima (<code>g++ -O3</code>) tenha tempo de execução <strong>T<sub>seq</sub> &ge; 2,0 segundos</strong>.</p>
+  <ul>
+    <li>Se o cálculo por posição fosse trivial (ex.: apenas uma multiplicação), o compilador sob <code>-O3</code> vetorizaria ou colapsaria o laço em poucos milissegundos, tornando o overhead de criação de processos/threads maior que o próprio trabalho útil.</li>
+    <li>Com 50 iterações dependentes da recorrência <code>valor = (valor * 31 + 17) % 1000000007</code> para cada uma das 10.000.000 de posições, o processador executa <strong>500 milhões de divisões modulares encadeadas</strong> seguidas de formatação ASCII e inversão de string.</li>
+    <li>Isso garante um tempo sequencial sólido de <strong>3,8621 segundos</strong> sob <code>-O3</code>, permitindo observar claramente a aceleração paralela (<em>Speedup</em>).</li>
+  </ul>
+</div>
+
+<div class="decision-card emerald">
+  <div class="decision-title"><span class="why-badge">Escolha 03</span> Por que Decomposição de Domínio em Blocos Contíguos (<em>Chunking</em>) em vez de Intercalação (<em>Round-Robin</em>)?</div>
+  <p><strong>A Fórmula Adotada:</strong> Dividimos o intervalo <code>[0, N)</code> em <code>P</code> blocos contíguos onde o trabalhador <code>p &isin; [0, P-1]</code> calcula exclusivamente <code>[p &times; chunk, (p == P-1) ? N : (p+1) &times; chunk)</code>.</p>
+  <p><strong>Por que não intercalar índices (ex.: Worker 0 faz pares, Worker 1 faz ímpares)?</strong></p>
+  <ul>
+    <li><strong>Prevenção de <em>False Sharing</em> (Falso Compartilhamento de Linha de Cache):</strong> Nos processadores x86_64 modernos, a linha de cache L1/L2 possui <strong>64 bytes</strong> — exatamente o tamanho de <strong>duas estruturas <code>EntradaDic</code> adjacentes</strong> (<code>dicionario[i]</code> e <code>dicionario[i+1]</code>). Se dois núcleos distintos escrevessem simultaneamente em índices vizinhos, o protocolo de coerência de cache (MESI) invalidaria repetidamente a linha de cache entre os núcleos (<em>cache line ping-pong</em>), derrubando o desempenho!</li>
+    <li>Com blocos contíguos de milhões de posições (ex.: <code>2.500.000</code> entradas = <code>80 MB</code> por worker para <code>P=4</code>), cada núcleo escreve em páginas de memória totalmente distantes, aproveitando 100% do <em>hardware prefetcher</em> e da localidade espacial sem <em>False Sharing</em> e sem necessidade de mutex durante a escrita do vetor.</li>
+  </ul>
+</div>
+
+<div class="page-break"></div>
+
+<div class="decision-card amber">
+  <div class="decision-title"><span class="why-badge">Escolha 04</span> Por que <code>mmap(MAP_SHARED | MAP_ANONYMOUS)</code> na versão de Processos em vez de Variável Global ou <code>new[]</code>?</div>
+  <p><strong>O Mecanismo de <em>Copy-on-Write (CoW)</em> do Linux:</strong> Quando um processo executa a chamada de sistema <code>fork()</code>, o Kernel Linux duplica o espaço de endereçamento virtual marcando as páginas como somente-leitura compartilhadas. No instante em que um processo filho tenta gravar uma entrada do dicionário em uma página alocada com <code>new[]</code> ou variável global, a MMU dispara uma exceção de proteção e o kernel aloca uma <strong>nova página física privada apenas para aquele filho</strong>.</p>
+  <p><strong>Consequência se não usássemos <code>mmap</code>:</strong> Ao final do <code>waitpid()</code>, o dicionário no processo pai continuaria completamente vazio (com lixo de memória), pois todas as gravações teriam ficado isoladas nas cópias privadas dos filhos (que foram destruídas no <code>_exit(0)</code>)!</p>
+  <p><strong>Por que <code>MAP_SHARED | MAP_ANONYMOUS</code> é a solução exata:</strong></p>
+  <ul>
+    <li><code>MAP_SHARED</code> desativa o isolamento por Copy-on-Write para aquela região: as tabelas de páginas do processo pai e de todos os processos filhos mapeiam para os <strong>mesmos quadros de página física (page frames) na RAM</strong>.</li>
+    <li><code>MAP_ANONYMOUS</code> (com descritor de arquivo <code>-1</code>) aloca a região diretamente em memória primária compartilhada (<code>shmem</code>), sem criar arquivos temporários em disco.</li>
+  </ul>
+</div>
+
+<div class="decision-card">
+  <div class="decision-title"><span class="why-badge">Escolha 05</span> Por que Acumulador Local (<code>checksum_local</code>) + Região Crítica Única ao Final em vez de Mutex dentro do Laço?</div>
+  <p><strong>A Exigência da Banca vs. Desempenho Paralelo:</strong> O professor estipulou que o projeto deve demonstrar explicitamente o controle de concorrência sobre uma variável compartilhada (Região Crítica) usando <code>std::mutex</code> (em Threads) e <code>pthread_mutex_t</code> compartilhado (em Processos).</p>
+  <ul>
+    <li><strong>Erro Clássico Evitado:</strong> Se colocássemos <code>lock()</code> e <code>unlock()</code> dentro do laço de <code>10.000.000</code> de iterações, os workers disputariam a trava 10 milhões de vezes, transformando um código paralelo em um código estritamente serializado e até 20x mais lento devido às chamadas de sistema <code>futex()</code>.</li>
+    <li><strong>Nossa Decisão de Engenharia (Padrão Map-Reduce):</strong> Cada worker possui uma variável automática <code>uint64_t checksum_local = 0</code> em sua própria pilha (<em>stack</em>/registrador). Durante as milhões de iterações do seu bloco, ele acumula sem contenção. Ao concluir o bloco, o worker entra na <strong>Região Crítica protegida por Mutex exatamente 1 vez</strong> (<code>controle-&gt;checksum_global += checksum_local</code>), garantindo exclusão mútua rigorosa com overhead de sincronização virtualmente zero!</li>
+  </ul>
+</div>
+
+<div class="decision-card purple">
+  <div class="decision-title"><span class="why-badge">Escolha 06</span> Por que usar <code>_exit(0)</code> nos Processos Filhos e <code>waitpid()</code> no Processo Pai?</div>
+  <ul>
+    <li><strong>Por que <code>_exit(0)</code> e não <code>exit(0)</code> ou <code>return 0</code> no filho?</strong> Em C++, <code>exit(0)</code> descarrega buffers de I/O da biblioteca C (<code>stdout</code>) herdados do pai e executa destrutores estáticos, o que pode duplicar saídas no terminal ou corromper estados compartilhados. A chamada de sistema POSIX <code>_exit(0)</code> encerra imediatamente o processo filho no kernel após liberar seu descritor de tarefa.</li>
+    <li><strong>Por que <code>waitpid(pids[p], &amp;status, 0)</code>?</strong> Funciona como uma <strong>barreira de sincronização explícita</strong>: o processo pai só inicia a leitura do dicionário para criptografar a senha quando todos os <code>P</code> filhos tiverem gravado suas fatias e saído da região crítica, além de recolher os estados na tabela de processos do kernel evitando <em>processos zumbis</em>.</li>
+  </ul>
+</div>
+
+<div class="decision-card emerald">
+  <div class="decision-title"><span class="why-badge">Escolha 07</span> Por que Incluímos a Descriptografia Reversa Diretamente nos Motores C++ e Mapeamos o Worker na Interface?</div>
+  <p><strong>Preservação do Propósito do Processamento Paralelo:</strong> Na especificação do problema, o sistema é definido como um criptografador e descriptografador baseado em dicionário dinâmico. Se a descriptografia fosse feita apenas em Python recalculando 256 valores ASCII fora do dicionário, pareceria desnecessário gerar 10.000.000 de entradas em C++.</p>
+  <p>Ao implementar a verificação reversa diretamente nos binários C++ consultando o buffer <code>dicionario[idx].valor</code> em memória compartilhada/heap e rastrear na interface web exatamente <strong>qual Worker paralelo (W<sub>0</sub> &hellip; W<sub>P-1</sub>) e qual fatia <code>[start, end)</code> gerou cada token da senha</strong>, comprovamos de forma cristalina a utilidade e a integridade do dicionário paralelo.</p>
+</div>
+
+<div class="page-break"></div>
+
+<div class="decision-card amber">
+  <div class="decision-title"><span class="why-badge">Escolha 08</span> Por que Reformulamos o CSS da Interface Web (Arquitetura Zero-Interference)?</div>
+  <p><strong>O Problema do Glassmorphism durante Medições de CPU:</strong> Uma interface web que utiliza <code>backdrop-filter: blur(16px)</code> combinado com animações infinitas de <code>background-position</code> a 60 FPS exige que as threads de renderização e composição do navegador recalculem texturas continuamente. Quando o usuário clicava para rodar o benchmark C++ na mesma máquina, o navegador competia pelos núcleos físicos da CPU contra os processos/threads do C++, reduzindo artificialmente o <em>Speedup</em>.</p>
+  <p><strong>A Solução Adotada:</strong> Substituímos os filtros de desfoque por superfícies sólidas de alto contraste com isolamento de layout (<code>contain: content</code>) e desativamos animações contínuas durante a execução do C++ e nos gráficos Chart.js (<code>animation: false</code>). Assim, o navegador consome <strong>0,0% de CPU</strong> durante a execução do motor C++, preservando 100% dos núcleos para o experimento paralelo.</p>
+</div>
+
+<div class="decision-card">
+  <div class="decision-title"><span class="why-badge">Escolha 09</span> Por que isolamos o laço de cálculo em uma função (correção de desempenho em Processos)?</div>
+  <p>Na primeira bateria de testes, 1 processo levou <strong>6,78 s</strong> contra <strong>3,94 s</strong> de 1 thread, embora o código de cálculo fosse idêntico. A hipótese inicial (páginas de 4 KB do <code>mmap(MAP_SHARED)</code> contra Transparent Huge Pages) foi <strong>testada e refutada</strong>:</p>
+  <ul>
+    <li><strong>Falhas de página:</strong> processos tiveram ~78.000 <em>minor page faults</em> e threads ~600 (medido por <code>getrusage</code>), porém o tempo de <strong>sistema</strong> foi de apenas 0,17 s. As falhas não explicavam os ~3 s de diferença.</li>
+    <li><strong>Teste com <code>MAP_PRIVATE</code>:</strong> trocando só o tipo de mapeamento, o tempo continuou em ~6,3 s (e as falhas caíram para ~650). Logo, o <code>MAP_SHARED</code> não era a causa.</li>
+    <li><strong>Causa real:</strong> o laço estava dentro de <code>main()</code> e o <code>g++ -O3</code> gerou código de máquina mais lento (tempo de <em>usuário</em> de 6,7 s contra 3,65 s). Ao mover o laço para uma função própria <code>noinline</code>, igual à das threads, 1 processo caiu para ~3,75 s e 8 processos para ~1,21 s.</li>
+    <li><strong>Resultado final (bateria refeita):</strong> Threads 3,44x e Processos 3,32x com 8 workers, praticamente empatados. O checksum permaneceu <code>5000000903112875</code>.</li>
+  </ul>
+  <p><strong>Lição:</strong> medir antes de afirmar a causa. Contadores de falhas e tempos de usuário/sistema separam custo de kernel de custo de código.</p>
+</div>
+
+<h2>Parte III — Consolidação dos Resultados e Análise dos 3 Gráficos Obrigatórios</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Ambiente</th>
+      <th>Paradigma</th>
+      <th>Workers (P)</th>
+      <th>Limite CPU</th>
+      <th>Tempo Geração Médio &plusmn; DP (5 runs)</th>
+      <th>Speedup (S<sub>p</sub>)</th>
+      <th>Eficiência (E<sub>p</sub>)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Host Físico</td><td>Sequencial</td><td>1</td><td>Ilimitado</td><td>3,862093 &plusmn; 0,230886 s</td><td>1,0000x</td><td>100,00%</td></tr>
+    <tr><td>Host Físico</td><td>Processos</td><td>1</td><td>Ilimitado</td><td>4,337416 &plusmn; 0,224016 s</td><td>0,8904x</td><td>89,04%</td></tr>
+    <tr><td>Host Físico</td><td>Processos</td><td>2</td><td>Ilimitado</td><td>2,506937 &plusmn; 0,272154 s</td><td>1,5406x</td><td>77,03%</td></tr>
+    <tr><td>Host Físico</td><td>Processos</td><td>4</td><td>Ilimitado</td><td>1,811021 &plusmn; 0,094442 s</td><td>2,1325x</td><td>53,31%</td></tr>
+    <tr><td>Host Físico</td><td>Processos</td><td>8</td><td>Ilimitado</td><td>1,164868 &plusmn; 0,014053 s</td><td>3,3155x</td><td>41,44%</td></tr>
+    <tr><td>Host Físico</td><td>Threads</td><td>1</td><td>Ilimitado</td><td>3,714630 &plusmn; 0,220430 s</td><td>1,0397x</td><td>103,97%</td></tr>
+    <tr><td>Host Físico</td><td>Threads</td><td>2</td><td>Ilimitado</td><td>2,395575 &plusmn; 0,049950 s</td><td>1,6122x</td><td>80,61%</td></tr>
+    <tr><td>Host Físico</td><td>Threads</td><td>4</td><td>Ilimitado</td><td>1,766663 &plusmn; 0,063687 s</td><td>2,1861x</td><td>54,65%</td></tr>
+    <tr><td>Host Físico</td><td>Threads</td><td>8</td><td>Ilimitado</td><td>1,121960 &plusmn; 0,010675 s</td><td>3,4423x</td><td>43,03%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Processos</td><td>2</td><td><code>--cpus="1"</code></td><td>5,433029 &plusmn; 0,362087 s</td><td>0,7109x</td><td>35,54%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Processos</td><td>4</td><td><code>--cpus="1"</code></td><td>7,658205 &plusmn; 0,158028 s</td><td>0,5043x</td><td>12,61%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Processos</td><td>8</td><td><code>--cpus="1"</code></td><td>10,193625 &plusmn; 0,192516 s</td><td>0,3789x</td><td>4,74%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Threads</td><td>2</td><td><code>--cpus="1"</code></td><td>5,339499 &plusmn; 0,364651 s</td><td>0,7233x</td><td>36,17%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Threads</td><td>4</td><td><code>--cpus="1"</code></td><td>7,326876 &plusmn; 0,130156 s</td><td>0,5271x</td><td>13,18%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Threads</td><td>8</td><td><code>--cpus="1"</code></td><td>9,656303 &plusmn; 0,503692 s</td><td>0,4000x</td><td>5,00%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Processos</td><td>2</td><td><code>--cpus="2"</code></td><td>2,322273 &plusmn; 0,025675 s</td><td>1,6631x</td><td>83,15%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Processos</td><td>4</td><td><code>--cpus="2"</code></td><td>3,629353 &plusmn; 0,090237 s</td><td>1,0641x</td><td>26,60%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Processos</td><td>8</td><td><code>--cpus="2"</code></td><td>4,704932 &plusmn; 0,043190 s</td><td>0,8209x</td><td>10,26%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Threads</td><td>2</td><td><code>--cpus="2"</code></td><td>2,261026 &plusmn; 0,030880 s</td><td>1,7081x</td><td>85,41%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Threads</td><td>4</td><td><code>--cpus="2"</code></td><td>3,728995 &plusmn; 0,355775 s</td><td>1,0357x</td><td>25,89%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Threads</td><td>8</td><td><code>--cpus="2"</code></td><td>4,494967 &plusmn; 0,040979 s</td><td>0,8592x</td><td>10,74%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Processos</td><td>2</td><td><code>--cpus="4"</code></td><td>2,316202 &plusmn; 0,017961 s</td><td>1,6674x</td><td>83,37%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Processos</td><td>4</td><td><code>--cpus="4"</code></td><td>1,832064 &plusmn; 0,022238 s</td><td>2,1081x</td><td>52,70%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Processos</td><td>8</td><td><code>--cpus="4"</code></td><td>2,288093 &plusmn; 0,019891 s</td><td>1,6879x</td><td>21,10%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Threads</td><td>2</td><td><code>--cpus="4"</code></td><td>2,269949 &plusmn; 0,090156 s</td><td>1,7014x</td><td>85,07%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Threads</td><td>4</td><td><code>--cpus="4"</code></td><td>1,740128 &plusmn; 0,017933 s</td><td>2,2194x</td><td>55,49%</td></tr>
+    <tr><td>Docker (Desktop)</td><td>Threads</td><td>8</td><td><code>--cpus="4"</code></td><td>2,137432 &plusmn; 0,038365 s</td><td>1,8069x</td><td>22,59%</td></tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<div class="chart-figure">
+  <img src="../testes/resultados/grafico1_tempo.png" alt="Gráfico 1 - Tempo de Execução">
+  <div class="chart-caption">Figura 1 — Gráfico 1: Redução progressiva do tempo de execução no Host conforme aumentamos de 1 para 8 workers.</div>
+</div>
+
+<div class="chart-figure">
+  <img src="../testes/resultados/grafico2_speedup.png" alt="Gráfico 2 - Speedup vs Ideal Linear">
+  <div class="chart-caption">Figura 2 — Gráfico 2: Curva de Speedup Real vs. Reta Linear Ideal (Lei de Amdahl e saturação do barramento de memória de 320 MB).</div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="chart-figure">
+  <img src="../testes/resultados/grafico3_docker.png" alt="Gráfico 3 - Host vs Docker Cgroups">
+  <div class="chart-caption">Figura 3 — Gráfico 3: Impacto do isolamento via Cgroups (--cpus="1", "2", "4") demonstrando contenção no escalonador CFS sob 1 CPU.</div>
+</div>
+
+<h2>Conclusão Geral</h2>
+<p>
+Todas as escolhas arquiteturais adotadas neste projeto foram guiadas pelos princípios fundamentais de Sistemas Operacionais: eliminação de contenção de alocador de heap via estrutura estática contígua (<code>EntradaDic[32]</code>), eliminação de <em>False Sharing</em> via decomposição em blocos contíguos disjuntos (<em>chunking</em>), contorno do <em>Copy-on-Write</em> via <code>mmap(MAP_SHARED)</code>, minimização da contenção de exclusão mútua via redução local antes do mutex (<code>std::mutex</code> / <code>pthread_mutex_t</code>), e avaliação empírica rigorosa do escalonador CFS sob restrição de <code>cgroups</code>.
+</p>
+
+</body>
+</html>

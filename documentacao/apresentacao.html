@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Apresentação Oficial SO2 - Criptografador de Senhas Baseado em Dicionário Dinâmico</title>
+<style>
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #090d16;
+    color: #f8fafc;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .slide {
+    width: 297mm;
+    height: 210mm;
+    padding: 16mm 20mm;
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #0b0f19;
+    border-bottom: 4px solid #0284c7;
+    position: relative;
+  }
+  .slide-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #1e293b;
+  }
+  .slide-num {
+    font-size: 11pt;
+    font-weight: 800;
+    color: #38bdf8;
+    background: rgba(14, 165, 233, 0.15);
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(56, 189, 248, 0.35);
+  }
+  h1 {
+    font-size: 24pt;
+    color: #f8fafc;
+    font-weight: 800;
+  }
+  h2 {
+    font-size: 18pt;
+    color: #38bdf8;
+    font-weight: 700;
+  }
+  h3 {
+    font-size: 13pt;
+    color: #c084fc;
+    margin-bottom: 8px;
+  }
+  p, li {
+    font-size: 11.5pt;
+    line-height: 1.55;
+    color: #cbd5e1;
+  }
+  ul {
+    padding-left: 20px;
+  }
+  li {
+    margin-bottom: 6px;
+  }
+  .slide-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+    padding: 10px 0;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+  }
+  .box {
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-left: 4px solid #0ea5e9;
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .box-purple {
+    border-left-color: #a855f7;
+  }
+  .box-green {
+    border-left-color: #10b981;
+  }
+  .box-amber {
+    border-left-color: #f59e0b;
+  }
+  pre {
+    background: #070a10;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 9.5pt;
+    color: #38bdf8;
+    line-height: 1.4;
+    overflow: hidden;
+  }
+  code {
+    font-family: "Consolas", "Courier New", monospace;
+    background: #1e293b;
+    color: #38bdf8;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 10pt;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+  }
+  th, td {
+    border: 1px solid #334155;
+    padding: 6px 10px;
+    text-align: left;
+  }
+  th {
+    background: #162032;
+    color: #38bdf8;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 8.5pt;
+  }
+  td {
+    background: #0f172a;
+    color: #e2e8f0;
+  }
+  .slide-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9pt;
+    color: #64748b;
+    border-top: 1px solid #1e293b;
+    padding-top: 8px;
+  }
+  .chart-img {
+    width: 100%;
+    max-height: 115mm;
+    object-fit: contain;
+    border: 1px solid #334155;
+    border-radius: 6px;
+  }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: TÓPICO 1 - PROBLEMA ORIGINAL -->
+<div class="slide">
+  <div class="slide-header">
+    <h2>Tópico 1 • O Problema Original e Escopo do Projeto</h2>
+    <span class="slide-num">Slide 01 / 10</span>
+  </div>
+  <div class="slide-body">
+    <h1>Criptografador de Senhas Baseado em Dicionário Dinâmico</h1>
+    <p><strong>Instituição:</strong> FAETERJ Petrópolis • <strong>Disciplina:</strong> Sistemas Operacionais II (Avaliação P1) • <strong>Aluno:</strong> Wallace Duarte Venâncio</p>
+    <div class="grid-2">
+      <div class="box">
+        <h3>Definição Algorítmica do Problema</h3>
+        <ul>
+          <li>Sistema de <strong>criptografia e descriptografia simétrica</strong> baseado na geração em tempo real de um dicionário dinâmico massivo em memória RAM (<code>N = 10.000.000</code> de entradas).</li>
+          <li>Para cada índice <code>i &isin; [0, N)</code>, executam-se <strong>50 iterações de aritmética modular</strong> com a semente secreta <code>K = 84729</code>: <code>valor = (valor * 31 + 17) % 1000000007</code>.</li>
+          <li>O resultado é formatado como <code>subst_&lt;valor&gt;</code>, invertido <em>in-place</em> e armazenado em estrutura contígua <code>EntradaDic[32]</code> (320 MB).</li>
+        </ul>
+      </div>
+      <div class="box box-purple">
+        <h3>Diretrizes de Engenharia de Sistemas Operacionais</h3>
+        <ul>
+          <li><strong>Proibição de Hardcoding:</strong> Todos os binários recebem argumentos dinâmicos via CLI: <code>./app &lt;workers&gt; [tamanho] [chave] [senha]</code>.</li>
+          <li><strong>Equivalência Estrita de Dados:</strong> Alocação contígua livre de locks de heap (<code>malloc</code>) e saída bit a bit idêntica entre as 3 versões (<code>diff = 0</code>).</li>
+          <li><strong>Três Paradigmas + Cgroups:</strong> Sequencial (Baseline &ge; 2s), Processos (<code>fork + mmap</code>), Threads (<code>std::thread + mutex</code>) e Docker (<code>--cpus</code>).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>FAETERJ Petrópolis — Sistemas Operacionais II (2026.2)</span>
+    <span>Aluno: Wallace Duarte Venâncio</span>
+  </div>
+</div>
+
+<!-- SLIDE 2: TÓPICO 2 - VERSÃO SEQUENCIAL -->
+<div class="slide">
+  <div class="slide-header">
+    <h2>Tópico 2 • Versão Sequencial (Baseline Monothread)</h2>
+    <span class="slide-num">Slide 02 / 10</span>
+  </div>
+  <div class="slide-body">
+    <div class="grid-2">
+      <div class="box box-amber">
+        <h3>Arquitetura do Baseline (<code>/sequencial/main.cpp</code>)</h3>
+        <ul>
+          <li>Executa em um único fluxo de instruções percorrendo sequencialmente <code>i = 0</code> até <code>9.999.999</code> (500 milhões de operações modulares totais).</li>
+          <li>Alocação contígua de <code>struct EntradaDic { char valor[32]; }</code> na heap sem chamadas a <code>malloc</code> dentro do laço crítico.</li>
+          <li>Calcula o <code>checksum_global = 5000000903112875</code>, cifra a senha e realiza a verificação de descriptografia reversa diretamente na memória.</li>
+          <li><strong>Requisito Atendido:</strong> Compilado com <code>g++ -O3</code>, atinge <strong>T<sub>seq</sub> = 3,8621 s &ge; 2,0 s</strong>.</li>
+        </ul>
+      </div>
+      <div>
+        <pre>
+// Laço crítico sequencial (N = 10.000.000)
+uint64_t checksum_global = 0;
+for (long long i = 0; i &lt; tamanho; ++i) {
+    long long valor = i * chave;
+    for (int j = 0; j &lt; 50; ++j) {
+        valor = (valor * 31 + 17) % 1000000007;
+    }
+    checksum_global += static_cast&lt;uint64_t&gt;(valor);
+
+    char buffer_tmp[32];
+    int len = std::snprintf(buffer_tmp, 32, "subst_%lld", valor);
+    for (int k = 0; k &lt; len; ++k) {
+        dicionario[i].valor[k] = buffer_tmp[len - 1 - k];
+    }
+    dicionario[i].valor[len] = '\0';
+}</pre>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>Módulo 1: /sequencial/app — Baseline de Referência para Speedup e Eficiência</span>
+    <span>T_seq Médio (5 execuções): 3,862093 s (&plusmn; 0,2309 s)</span>
+  </div>
+</div>
+
+<!-- SLIDE 3: TÓPICO 3 - ESTRATÉGIA DE PARALELIZAÇÃO -->
+<div class="slide">
+  <div class="slide-header">
+    <h2>Tópico 3 • Estratégia de Paralelização (Decomposição de Domínio)</h2>
+    <span class="slide-num">Slide 03 / 10</span>
+  </div>
+  <div class="slide-body">
+    <div class="box box-green">
+      <h3>Particionamento Estático por Blocos Contíguos Disjuntos (Chunking)</h3>
+      <p>Como o custo computacional de cada posição <code>i</code> é uniforme (exatamente 50 iterações modulares + inversão de string), o balanceamento de carga ótimo é obtido dividindo o domínio <code>[0, N)</code> em <code>P</code> subintervalos contíguos disjuntos:</p>
+    </div>
+    <div class="grid-2">
+      <pre>
+long long chunk = tamanho / workers;
+for (int p = 0; p &lt; workers; ++p) {
+    long long start_idx = p * chunk;
+    long long end_idx = (p == workers - 1)
+                        ? tamanho
+                        : start_idx + chunk;
+    // Worker p processa exclusivamente [start_idx, end_idx)
+}</pre>
+      <div class="box">
+        <h3>Exemplo para N = 10.000.000 e P = 4 Workers:</h3>
+        <ul>
+          <li><strong>Worker #0:</strong> <code>[0 .. 2.500.000)</code> &rarr; 80 MB</li>
+          <li><strong>Worker #1:</strong> <code>[2.500.000 .. 5.000.000)</code> &rarr; 80 MB</li>
+          <li><strong>Worker #2:</strong> <code>[5.000.000 .. 7.500.000)</code> &rarr; 80 MB</li>
+          <li><strong>Worker #3:</strong> <code>[7.500.000 .. 10.000.000)</code> &rarr; 80 MB</li>
+          <li><strong>Propriedade Fundamental:</strong> Interseção vazia entre fatias &rArr; escrita paralela livre de <em>race conditions</em> no vetor!</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>Decomposição de Domínio Simétrica entre Processos e Threads</span>
+    <span>Localidade Espacial de Cache L1/L2 Preservada</span>
+  </div>
+</div>
+
+<!-- SLIDE 4: TÓPICO 4 - IMPLEMENTAÇÃO COM PROCESSOS -->
+<div class="slide">
+  <div class="slide-header">
+    <h2>Tópico 4 • Implementação Paralela com Processos (POSIX)</h2>
+    <span class="slide-num">Slide 04 / 10</span>
+  </div>
+  <div class="slide-body">
+    <div class="grid-2">
+      <div class="box box-purple">
+        <h3>Ciclo de Vida: <code>fork()</code>, <code>_exit(0)</code> e Barreira <code>waitpid()</code></h3>
+        <ul>
+          <li>O processo pai instancia <code>P</code> processos filhos via syscall <code>fork()</code>.</li>
+          <li>Cada filho calcula sua fatia <code>[start_idx, end_idx)</code>, atualiza o checksum compartilhado sob exclusão mútua e encerra imediatamente com <code>_exit(0)</code>.</li>
+          <li>O processo pai executa uma <strong>barreira de sincronização determinística</strong> aguardando todos os PIDs via <code>waitpid(pids[p], &amp;status, 0)</code> antes de cifrar a senha.</li>
+        </ul>
+      </div>
+      <pre>
+for (int p = 0; p &lt; workers; ++p) {
+    pid_t pid = fork();
+    if (pid == 0) { // PROCESSO FILHO
+        uint64_t checksum_local = 0;
+        for (long long i = start_idx; i &lt; end_idx; ++i) {
+            // 50 iteracoes + gravacao em dicionario[i]
+        }
+        pthread_mutex_lock(&amp;controle-&gt;mutex);
+        controle-&gt;checksum_global += checksum_local;
+        pthread_mutex_unlock(&amp;controle-&gt;mutex);
+        _exit(0);
+    }
+    pids[p] = pid;
+}
+for (int p = 0; p &lt; workers; ++p) waitpid(pids[p], NULL, 0);</pre>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>Módulo 2: /processos/app — Concorrência Multiprocesso via Syscalls POSIX</span>
+    <span>Speedup em 8 Processos: 3,32x (1,1649 s)</span>
+  </div>
+</div>
+
+<!-- SLIDE 5: TÓPICO 5 - MEMÓRIA COMPARTILHADA -->
+<div class="slide">
+  <div class="slide-header">
+    <h2>Tópico 5 • Memória Compartilhada (<code>mmap</code> vs. Copy-on-Write)</h2>
+    <span class="slide-num">Slide 05 / 10</span>
+  </div>
+  <div class="slide-body">
+    <div class="grid-2">
+      <div class="box">
+        <h3>Por que Variáveis Globais / <code>malloc</code> Falhariam no <code>fork()</code>?</h3>
+        <ul>
+          <li>No Linux, o <code>fork()</code> clona a tabela de páginas do processo pai marcando as páginas privadas como somente-leitura sob semântica <strong>Copy-on-Write (CoW)</strong>.</li>
+          <li>Quando um processo filho escreve em memória privada (heap/global), o kernel gera um <em>page fault</em> e cria uma cópia física isolada invisível para o processo pai!</li>
+        </ul>
+      </div>
+      <div class="box box-green">
+        <h3>Solução POSIX IPC: <code>mmap(MAP_SHARED | MAP_ANONYMOUS)</code></h3>
+        <ul>
+          <li>Alocamos os 320 MB do dicionário e a estrutura de controle com <code>PROT_READ | PROT_WRITE</code> e <code>MAP_SHARED | MAP_ANONYMOUS</code> antes do <code>fork()</code>.</li>
+          <li>As tabelas de páginas de pai e filhos apontam para os <strong>mesmos quadros físicos de RAM</strong>, permitindo escrita simultânea visível ao pai e liberação via <code>munmap()</code>.</li>
+        </ul>
+      </div>
+    </div>
+    <pre>
+size_t dic_bytes = static_cast&lt;size_t&gt;(tamanho) * sizeof(EntradaDic);
+EntradaDic* dicionario = static_cast&lt;EntradaDic*&gt;(
+    mmap(NULL, dic_bytes, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0)
+);</pre>
+  </div>
+  <div class="slide-footer">
+    <span>Compartilhamento Físico de Páginas em Kernel Linux</span>
+    <span>Higienização Estrita com munmap() e pthread_mutex_destroy()</span>
+  </div>
+</div>
+
+<!-- SLIDE 6: TÓPICO 6 - SINCRONIZAÇÃO E REGIÕES CRÍTICAS -->
+<div class="slide">
+  <div class="slide-header">
+    <h2>Tópico 6 • Sincronização e Controle de Região Crítica</h2>
+    <span class="slide-num">Slide 06 / 10</span>
+  </div>
+  <div class="slide-body">
+    <div class="grid-2">
+      <div class="box box-amber">
+        <h3>Prevenção de Contenção de Lock (Acumulação Local + Redução)</h3>
+        <ul>
+          <li>Se os trabalhadores adquirissem o mutex a cada iteração do laço (10.000.000 de vezes), a serialização destruiria completamente o paralelismo.</li>
+          <li>Cada worker acumula <code>checksum_local</code> em registrador/pilha privativa durante o laço e entra na <strong>Região Crítica apenas 1 vez</strong> ao concluir seu bloco.</li>
+        </ul>
+      </div>
+      <div class="box box-purple">
+        <h3>Primitivas de Exclusão Mútua Utilizadas</h3>
+        <ul>
+          <li><strong>Em Processos:</strong> <code>pthread_mutex_t</code> alocado via <code>mmap(MAP_SHARED)</code> e inicializado com atributo <code>PTHREAD_PROCESS_SHARED</code>.</li>
+          <li><strong>Em Threads:</strong> <code>std::mutex</code> gerenciado com idioma RAII via <code>std::lock_guard&lt;std::mutex&gt;</code>.</li>
+          <li><strong>Validação:</strong> Checksum idêntico (<code>5000000903112875</code>) em 100% das baterias!</li>
+        </ul>
+      </div>
+    </div>
+    <pre>
+// Inicialização do Mutex Interprocessos (/processos/main.cpp)           // Região Crítica em Threads (/threads/main.cpp)
+pthread_mutexattr_t mattr;                                               {
+pthread_mutexattr_init(&amp;mattr);                                              std::lock_guard&lt;std::mutex&gt; lock(mtx_checksum);
+pthread_mutexattr_setpshared(&amp;mattr, PTHREAD_PROCESS_SHARED);                checksum_global += checksum_local;
+pthread_mutex_init(&amp;controle-&gt;mutex, &amp;mattr);                            }</pre>
+  </div>
+  <div class="slide-footer">
+    <span>Controle de Concorrência Determinístico</span>
+    <span>Zero Condições de Corrida (Race Conditions)</span>
+  </div>
+</div>
+
+<!-- SLIDE 7: TÓPICO 7 - IMPLEMENTAÇÃO COM THREADS -->
+<div class="slide">
+  <div class="slide-header">
+    <h2>Tópico 7 • Implementação Paralela com Threads (<code>std::thread</code>)</h2>
+    <span class="slide-num">Slide 07 / 10</span>
+  </div>
+  <div class="slide-body">
+    <div class="grid-2">
+      <div class="box">
+        <h3>Vantagens do Espaço de Endereçamento Compartilhado</h3>
+        <ul>
+          <li>Threads instanciadas via <code>std::thread</code> (syscall <code>clone()</code> com <code>CLONE_VM</code>) compartilham nativamente a mesma tabela de páginas e o mesmo heap (<code>EntradaDic*</code>).</li>
+          <li><strong>Menor Overhead de Criação e Context Switch:</strong> Não há clonagem de descritores de memória virtual (VMAs) nem descarga de TLB entre threads do mesmo processo.</li>
+          <li><strong>Memória sem <code>mmap</code>:</strong> o heap privado gera ~600 <em>minor page faults</em> contra ~78.000 do <code>mmap(MAP_SHARED)</code> (medido), mas esse custo é pequeno (&lt; 0,2 s de tempo de sistema).</li>
+        </ul>
+      </div>
+      <pre>
+std::vector&lt;std::thread&gt; threads;
+threads.reserve(workers);
+long long chunk = tamanho / workers;
+
+for (int p = 0; p &lt; workers; ++p) {
+    long long start_idx = p * chunk;
+    long long end_idx = (p == workers - 1) ? tamanho : start_idx + chunk;
+    threads.emplace_back(
+        processar_fatia_dicionario, dicionario,
+        start_idx, end_idx, chave,
+        std::ref(checksum_global), std::ref(mtx_checksum)
+    );
+}
+for (auto&amp; th : threads) th.join();</pre>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>Módulo 3: /threads/app — Paralelismo de Memória Compartilhada Nativa</span>
+    <span>Melhor Desempenho Absoluto no Host: 1,1220 s com 8 Threads (Speedup 3,44x)</span>
+  </div>
+</div>
+
+<!-- SLIDE 8: TÓPICO 8 - RESULTADOS EXPERIMENTAIS -->
+<div class="slide">
+  <div class="slide-header">
+    <h2>Tópico 8 • Resultados Experimentais (Média e Desvio Padrão — 5 Execuções)</h2>
+    <span class="slide-num">Slide 08 / 10</span>
+  </div>
+  <div class="slide-body">
+    <table>
+      <thead>
+        <tr>
+          <th>Ambiente</th>
+          <th>Implementação</th>
+          <th>Workers (P)</th>
+          <th>Limite CPU</th>
+          <th>Tempo Geração Médio &plusmn; DP (s)</th>
+          <th>Tempo Total Médio (s)</th>
+          <th>Speedup (S<sub>p</sub>)</th>
+          <th>Eficiência (E<sub>p</sub>)</th>
+          <th>Checksum</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Host Físico</td><td><strong>Sequencial (Baseline)</strong></td><td>1</td><td>Ilimitado (12 Lógicos)</td><td><strong>3,862093 &plusmn; 0,2309 s</strong></td><td>3,862157 s</td><td><strong>1,0000x</strong></td><td>100,00%</td><td>5000000903112875</td></tr>
+        <tr><td>Host Físico</td><td>Processos (fork+mmap)</td><td>2</td><td>Ilimitado</td><td>2,506937 &plusmn; 0,2722 s</td><td>2,507546 s</td><td>1,5406x</td><td>77,03%</td><td>5000000903112875</td></tr>
+        <tr><td>Host Físico</td><td>Processos (fork+mmap)</td><td>4</td><td>Ilimitado</td><td>1,811021 &plusmn; 0,0944 s</td><td>1,811587 s</td><td>2,1325x</td><td>53,31%</td><td>5000000903112875</td></tr>
+        <tr><td>Host Físico</td><td><strong>Processos (fork+mmap)</strong></td><td>8</td><td>Ilimitado</td><td><strong>1,164868 &plusmn; 0,0141 s</strong></td><td>1,165554 s</td><td><strong>3,3155x</strong></td><td>41,44%</td><td>5000000903112875</td></tr>
+        <tr><td>Host Físico</td><td>Threads (std::thread)</td><td>2</td><td>Ilimitado</td><td>2,395575 &plusmn; 0,0500 s</td><td>2,395625 s</td><td>1,6122x</td><td>80,61%</td><td>5000000903112875</td></tr>
+        <tr><td>Host Físico</td><td>Threads (std::thread)</td><td>4</td><td>Ilimitado</td><td>1,766663 &plusmn; 0,0637 s</td><td>1,766710 s</td><td>2,1861x</td><td>54,65%</td><td>5000000903112875</td></tr>
+        <tr><td>Host Físico</td><td><strong>Threads (std::thread)</strong></td><td>8</td><td>Ilimitado</td><td><strong>1,121960 &plusmn; 0,0107 s</strong></td><td>1,122019 s</td><td><strong>3,4423x</strong></td><td>43,03%</td><td>5000000903112875</td></tr>
+        <tr><td>Docker (--cpus)</td><td>Processos (fork+mmap)</td><td>8</td><td><code>--cpus="1"</code></td><td>10,193625 &plusmn; 0,1925 s</td><td>10,194843 s</td><td>0,3789x</td><td>4,74%</td><td>5000000903112875</td></tr>
+        <tr><td>Docker (--cpus)</td><td>Threads (std::thread)</td><td>8</td><td><code>--cpus="1"</code></td><td>9,656303 &plusmn; 0,5037 s</td><td>9,656409 s</td><td>0,4000x</td><td>5,00%</td><td>5000000903112875</td></tr>
+        <tr><td>Docker (--cpus)</td><td>Processos (fork+mmap)</td><td>4</td><td><code>--cpus="2"</code></td><td>3,629353 &plusmn; 0,0902 s</td><td>3,630100 s</td><td>1,0641x</td><td>26,60%</td><td>5000000903112875</td></tr>
+        <tr><td>Docker (--cpus)</td><td>Threads (std::thread)</td><td>4</td><td><code>--cpus="2"</code></td><td>3,728995 &plusmn; 0,3558 s</td><td>3,729083 s</td><td>1,0357x</td><td>25,89%</td><td>5000000903112875</td></tr>
+        <tr><td>Docker (--cpus)</td><td>Processos (fork+mmap)</td><td>8</td><td><code>--cpus="4"</code></td><td>2,288093 &plusmn; 0,0199 s</td><td>2,288906 s</td><td>1,6879x</td><td>21,10%</td><td>5000000903112875</td></tr>
+        <tr><td>Docker (--cpus)</td><td>Threads (std::thread)</td><td>8</td><td><code>--cpus="4"</code></td><td>2,137432 &plusmn; 0,0384 s</td><td>2,137519 s</td><td>1,8069x</td><td>22,59%</td><td>5000000903112875</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="slide-footer">
+    <span>Hardware: 12th Gen Intel Core i5-1235U • N = 10.000.000 (320 MB) • 135 Execuções Totais</span>
+    <span>Arquivos CSV em /testes/resultados/</span>
+  </div>
+</div>
+
+<!-- SLIDE 9: TÓPICO 9 - COMPARAÇÃO CRÍTICA ENTRE VERSÕES (OS 3 GRÁFICOS) -->
+<div class="slide">
+  <div class="slide-header">
+    <h2>Tópico 9 • Comparação Crítica entre Versões (Os 3 Gráficos Obrigatórios)</h2>
+    <span class="slide-num">Slide 09 / 10</span>
+  </div>
+  <div class="slide-body">
+    <div class="grid-3">
+      <div>
+        <img class="chart-img" src="../testes/resultados/grafico1_tempo.png" alt="Gráfico 1">
+        <p style="font-size:9.5pt; margin-top:6px;"><strong>Gráfico 1 (Tempo):</strong> Queda consistente do tempo até 8 workers (1,12 s em Threads e 1,16 s em Processos).</p>
+      </div>
+      <div>
+        <img class="chart-img" src="../testes/resultados/grafico2_speedup.png" alt="Gráfico 2">
+        <p style="font-size:9.5pt; margin-top:6px;"><strong>Gráfico 2 (Speedup):</strong> Afastamento da reta ideal explicado pela Lei de Amdahl e saturação do barramento RAM (320 MB).</p>
+      </div>
+      <div>
+        <img class="chart-img" src="../testes/resultados/grafico3_docker.png" alt="Gráfico 3">
+        <p style="font-size:9.5pt; margin-top:6px;"><strong>Gráfico 3 (Host vs. Docker):</strong> Sob <code>--cpus=1</code>, 8 workers sofrem contenção severa no CFS sem ganho paralelo.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>Análise Visual Trilateral: Host Físico vs. Speedup Linear vs. Cgroups CFS</span>
+    <span>Gráficos gerados via /testes/plot_graficos.py</span>
+  </div>
+</div>
+
+<!-- SLIDE 10: TÓPICO 10 - CONCLUSÕES -->
+<div class="slide">
+  <div class="slide-header">
+    <h2>Tópico 10 • Conclusões & Síntese para Arguição Presencial</h2>
+    <span class="slide-num">Slide 10 / 10</span>
+  </div>
+  <div class="slide-body">
+    <div class="grid-2">
+      <div class="box box-green">
+        <h3>1. Lei de Amdahl & Gargalo Memory-Bound</h3>
+        <ul>
+          <li>A aceleração máxima atingiu <strong>3,44x (Threads)</strong> e <strong>3,32x (Processos)</strong> com 8 workers.</li>
+          <li>Além da fração sequencial inevitável, a gravação concorrente de <strong>320 MB</strong> satura a largura de banda do controlador de memória RAM e o cache L3 compartilhado.</li>
+        </ul>
+      </div>
+      <div class="box box-purple">
+        <h3>2. Threads vs. Processos (Custos de Kernel)</h3>
+        <ul>
+          <li><strong>Threads</strong> e <strong>Processos</strong> ficaram muito próximos (3,44x vs 3,32x com 8 workers): o cálculo é o mesmo código; threads têm leve vantagem por criar fluxos mais baratos e dispensar o <code>mmap</code>.</li>
+          <li><strong>Processos</strong> exigem <code>mmap(MAP_SHARED)</code> (~78.000 <em>minor page faults</em>, medidos) e IPC explícito, em troca de isolamento de memória entre processos.</li>
+        </ul>
+      </div>
+      <div class="box box-amber">
+        <h3>3. Efeito de Cgroups (<code>--cpus</code>) e Escalonador CFS</h3>
+        <ul>
+          <li>Com <code>--cpus="1"</code> (cota de 100 ms por período de 100 ms), instanciar 8 fluxos força o <em>Completely Fair Scheduler</em> a realizar preempções contínuas e trocas de contexto sem paralelismo físico real.</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>4. Conformidade Integral com o Edital SO2</h3>
+        <ul>
+          <li>Equivalência bit a bit comprovada (<code>diff = 0</code>), CLI dinâmica sem hardcoding, 135 execuções documentadas em CSV e interface de telemetria livre de interferência de CPU.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span>Apresentação Finalizada — Pronta para Arguição Individual Presencial</span>
+    <span>FAETERJ Petrópolis • Wallace Duarte Venâncio</span>
+  </div>
+</div>
+
+</body>
+</html>
+

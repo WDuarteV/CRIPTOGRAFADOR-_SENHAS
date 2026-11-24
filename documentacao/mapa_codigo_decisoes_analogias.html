@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Mapa Estrutural do Código e Decisões de Engenharia - SO2 FAETERJ</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 12mm 14mm 12mm 14mm;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    background-color: #ffffff;
+    line-height: 1.45;
+    font-size: 9.3pt;
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  h1, h2, h3, h4 {
+    color: #0f172a;
+    font-weight: 700;
+    margin-top: 0;
+  }
+  h1 {
+    font-size: 16pt;
+    color: #ffffff;
+    margin-bottom: 4px;
+  }
+  h2 {
+    font-size: 12pt;
+    color: #0369a1;
+    border-bottom: 2px solid #bae6fd;
+    padding-bottom: 3px;
+    margin-top: 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h3 {
+    font-size: 10pt;
+    color: #0f766e;
+    margin-top: 8px;
+    margin-bottom: 4px;
+  }
+  p {
+    margin: 0 0 6px 0;
+  }
+  ul, ol {
+    margin: 0 0 8px 0;
+    padding-left: 18px;
+  }
+  li {
+    margin-bottom: 3px;
+  }
+  .header-card {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: #f8fafc;
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    border-left: 6px solid #38bdf8;
+  }
+  .header-card p {
+    color: #cbd5e1;
+    margin: 2px 0;
+    font-size: 9pt;
+  }
+  .folder-block {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background: #f8fafc;
+    margin-bottom: 11px;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+  .folder-header {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 6px 12px;
+    font-weight: 700;
+    font-size: 9.8pt;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .folder-tag {
+    background: #0284c7;
+    color: #ffffff;
+    font-size: 7.8pt;
+    padding: 1px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .folder-body {
+    padding: 8px 12px;
+  }
+  .loc-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 5px 0 7px 0;
+    font-size: 8.8pt;
+  }
+  .loc-table th, .loc-table td {
+    border: 1px solid #cbd5e1;
+    padding: 4px 7px;
+    text-align: left;
+    vertical-align: top;
+  }
+  .loc-table th {
+    background: #f1f5f9;
+    color: #0f172a;
+    font-weight: 700;
+  }
+  .analogy-box {
+    background: #ecfdf5;
+    border-left: 4px solid #10b981;
+    padding: 6px 10px;
+    border-radius: 4px;
+    color: #065f46;
+    margin-top: 5px;
+    font-size: 8.9pt;
+  }
+  .analogy-box strong {
+    color: #047857;
+  }
+  .teacher-q {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    padding: 5px 9px;
+    border-radius: 4px;
+    color: #92400e;
+    margin-top: 5px;
+    font-size: 8.8pt;
+  }
+  .code-badge {
+    font-family: Consolas, "Courier New", monospace;
+    background: #e2e8f0;
+    color: #0f172a;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 8.4pt;
+    font-weight: 600;
+  }
+  .page-break {
+    page-break-before: always;
+  }
+</style>
+</head>
+<body>
+
+<div class="header-card">
+  <h1>🗺️ Mapa Estrutural do Código & Guia de Arguição Presencial</h1>
+  <p><strong>Projeto:</strong> Criptografador e Descriptografador de Senhas Baseado em Dicionário Dinâmico em C++</p>
+  <p><strong>Disciplina:</strong> Sistemas Operacionais II • <strong>Instituição:</strong> FAETERJ Petrópolis • <strong>Aluno:</strong> Wallace Duarte Venâncio</p>
+  <p>Guia canônico localizando cada pasta, arquivos-chave, linhas exatas das decisões de kernel, analogias didáticas e perguntas prováveis da banca.</p>
+</div>
+
+<h2>📂 1. Módulo Sequencial (Baseline Monothread) — <code>/sequencial</code></h2>
+
+<div class="folder-block">
+  <div class="folder-header">
+    <span>/sequencial/main.cpp &amp; Makefile</span>
+    <span class="folder-tag">Baseline Oficial &ge; 2s</span>
+  </div>
+  <div class="folder-body">
+    <table class="loc-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Decisão Técnica</th>
+          <th style="width: 22%;">Arquivo &amp; Linha</th>
+          <th style="width: 53%;">O que o código faz &amp; Justificativa de Engenharia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Estrutura Estática Contígua</strong></td>
+          <td><span class="code-badge">main.cpp: L14-16</span></td>
+          <td><code>struct EntradaDic { char valor[32]; };</code><br>Aloca 320 MB de uma só vez (10.000.000 &times; 32 bytes). Elimina milhões de chamadas a <code>malloc()</code> e fragmentação no heap.</td>
+        </tr>
+        <tr>
+          <td><strong>Parser Dinâmico CLI</strong></td>
+          <td><span class="code-badge">main.cpp: L33-79</span></td>
+          <td>Lê <code>argc/argv</code>: workers, tamanho, chave e senha. Proíbe qualquer valor <em>hardcoded</em>, cumprindo estritamente a exigência do edital.</td>
+        </tr>
+        <tr>
+          <td><strong>Cronometria Isolada</strong></td>
+          <td><span class="code-badge">main.cpp: L89 e L111</span></td>
+          <td><code>std::chrono::high_resolution_clock</code> isola estritamente o tempo de cálculo do dicionário (<code>Tempo de Geração</code>), sem misturar com alocação inicial ou I/O.</td>
+        </tr>
+        <tr>
+          <td><strong>Laço de Carga CPU-Bound</strong></td>
+          <td><span class="code-badge">main.cpp: L94-100</span></td>
+          <td>50 iterações de <code>valor = (valor * 31 + 17) % 1000000007</code>. A dependência de dados impede o compilador <code>g++ -O3</code> de vetorizar ou eliminar o laço.</td>
+        </tr>
+        <tr>
+          <td><strong>Formatação sem Heap</strong></td>
+          <td><span class="code-badge">main.cpp: L104-108</span></td>
+          <td>Usa buffer local na stack (<code>char buffer_tmp[32]</code>) e <code>std::snprintf</code>, invertendo a string diretamente na struct contígua.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="analogy-box">
+      <strong>💡 Analogia Simples para a Banca:</strong><br>
+      <em>"A versão sequencial é como um único escriba copiando um livro de 10 milhões de linhas do início ao fim. Ele trabalha ininterruptamente e leva cerca de 3,86 segundos para terminar todo o volume sozinho."</em>
+    </div>
+
+    <div class="teacher-q">
+      <strong>❓ Pergunta do Professor:</strong> <em>"Por que não usou <code>std::vector&lt;std::string&gt;</code> aqui?"</em><br>
+      <strong>👉 Resposta Rápida:</strong> <em>"Porque cada <code>std::string</code> aloca dinamicamente no heap chamando <code>malloc()</code>. Para 10 milhões de itens, teríamos sobrecarga massiva do alocador e perda de localidade de cache. Além disso, a struct com array fixo garante tamanho contíguo idêntico entre o sequencial, threads e a memória compartilhada dos processos."</em>
+    </div>
+  </div>
+</div>
+
+<h2>📂 2. Módulo Multiprocessamento POSIX — <code>/processos</code></h2>
+
+<div class="folder-block">
+  <div class="folder-header">
+    <span>/processos/main.cpp &amp; Makefile</span>
+    <span class="folder-tag">IPC &amp; Memória Compartilhada</span>
+  </div>
+  <div class="folder-body">
+    <table class="loc-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Decisão Técnica</th>
+          <th style="width: 22%;">Arquivo &amp; Linha</th>
+          <th style="width: 53%;">O que o código faz &amp; Justificativa de Engenharia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Memória Compartilhada via <code>mmap</code></strong></td>
+          <td><span class="code-badge">main.cpp: L127 e L136</span></td>
+          <td><code>mmap(..., MAP_SHARED | MAP_ANONYMOUS, -1, 0)</code> mapeia 320 MB de RAM física compartilhada entre pai e filhos, <strong>contornando o Copy-on-Write (CoW)</strong> do Linux.</td>
+        </tr>
+        <tr>
+          <td><strong>Função Isolada (<code>noinline</code>)</strong></td>
+          <td><span class="code-badge">main.cpp: L41</span></td>
+          <td><code>static __attribute__((noinline)) uint64_t trabalho(...)</code><br>Evita que o <code>g++ -O3</code> gere código desotimizado dentro do <code>main()</code> (resolvendo a anomalia inicial de 6,78s para 3,75s).</td>
+        </tr>
+        <tr>
+          <td><strong>Mutex Interprocessos</strong></td>
+          <td><span class="code-badge">main.cpp: L145-149</span></td>
+          <td>Configura <code>pthread_mutexattr_setpshared(&amp;mattr, PTHREAD_PROCESS_SHARED)</code> na memória compartilhada para sincronizar a Região Crítica entre processos distintos.</td>
+        </tr>
+        <tr>
+          <td><strong>Criação de Filhos via <code>fork()</code></strong></td>
+          <td><span class="code-badge">main.cpp: L163</span></td>
+          <td><code>pid_t pid = fork();</code> clona o processo pai em P processos independentes, cada um executando sua fatia contígua (<em>Chunk</em>).</td>
+        </tr>
+        <tr>
+          <td><strong>Região Crítica (Map-Reduce)</strong></td>
+          <td><span class="code-badge">main.cpp: L181-183</span></td>
+          <td><code>pthread_mutex_lock</code> e <code>unlock</code> executados <strong>uma única vez por filho</strong> para somar o <code>checksum_local</code> ao <code>checksum_global</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Finalização com <code>_exit(0)</code></strong></td>
+          <td><span class="code-badge">main.cpp: L186</span></td>
+          <td>Encerra o processo filho imediatamente no kernel sem descarregar buffers herdados de <code>stdout</code>, evitando saídas duplicadas no terminal.</td>
+        </tr>
+        <tr>
+          <td><strong>Barreira com <code>waitpid()</code></strong></td>
+          <td><span class="code-badge">main.cpp: L196</span></td>
+          <td><code>waitpid(pids[p], &amp;status, 0);</code> atua como barreira estrita de sincronização e recolhe status para evitar <strong>processos zumbis</strong>.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="analogy-box">
+      <strong>💡 Analogia Simples para a Banca:</strong><br>
+      <em>"A versão com processos é como 4 monges em 4 salas separadas e trancadas. Nenhum consegue ver a mesa do outro diretamente. Por isso, construímos uma mesa giratória especial no centro (a memória compartilhada com mmap). Todos escrevem nela de forma coordenada e, quando terminam, avisam o abade (o processo pai aguardando via waitpid)."</em>
+    </div>
+
+    <div class="teacher-q">
+      <strong>❓ Pergunta do Professor:</strong> <em>"O que aconteceria se você usasse <code>new EntradaDic[10000000]</code> em vez de <code>mmap(MAP_SHARED)</code>?"</em><br>
+      <strong>👉 Resposta Rápida:</strong> <em>"Devido ao mecanismo de Copy-on-Write (CoW) do Linux, quando o filho tentasse escrever no vetor alocado com new, a MMU geraria uma falha de página e o kernel criaria uma cópia privada na RAM apenas para aquele filho. Ao final do waitpid, o processo pai leria sua memória original intacta com lixo, sem nenhum dado dos filhos!"</em>
+    </div>
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<h2>📂 3. Módulo Multithreading Nativo — <code>/threads</code></h2>
+
+<div class="folder-block">
+  <div class="folder-header">
+    <span>/threads/main.cpp &amp; Makefile</span>
+    <span class="folder-tag">Memória Compartilhada Nativa C++17</span>
+  </div>
+  <div class="folder-body">
+    <table class="loc-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Decisão Técnica</th>
+          <th style="width: 22%;">Arquivo &amp; Linha</th>
+          <th style="width: 53%;">O que o código faz &amp; Justificativa de Engenharia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Cálculo de Chunking Contíguo</strong></td>
+          <td><span class="code-badge">main.cpp: L131-136</span></td>
+          <td><code>chunk = tamanho / workers; start = p * chunk; end = ...</code><br>Divide os 10 milhões em fatias contíguas disjuntas, prevenindo <strong>False Sharing</strong> na cache L1/L2.</td>
+        </tr>
+        <tr>
+          <td><strong>Criação Leve de Threads</strong></td>
+          <td><span class="code-badge">main.cpp: L137-142</span></td>
+          <td><code>threads.emplace_back(processar_fatia_dicionario, ...)</code><br>Usa <code>std::thread</code> (syscall <code>clone(CLONE_VM)</code>), compartilhando o heap de 320 MB sem necessidade de <code>mmap</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Região Crítica via RAII</strong></td>
+          <td><span class="code-badge">main.cpp: L53-56</span></td>
+          <td><code>std::lock_guard&lt;std::mutex&gt; lock(mtx_checksum);</code><br>Garante exclusão mútua na soma do <code>checksum_global</code> com liberação automática de trava mesmo em caso de exceção.</td>
+        </tr>
+        <tr>
+          <td><strong>Barreira via <code>.join()</code></strong></td>
+          <td><span class="code-badge">main.cpp: L150-152</span></td>
+          <td><code>th.join();</code> suspende a thread principal até que todas as operárias tenham gravado suas fatias e saído da região crítica.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="analogy-box">
+      <strong>💡 Analogia Simples para a Banca:</strong><br>
+      <em>"A versão com threads é como 4 artesãos trabalhando lado a lado na mesma sala e sobre a mesma mesa de trabalho. Como eles compartilham o mesmo espaço físico, não há custo de transporte de material entre salas. Para não baterem os cotovelos (False Sharing), cada um trabalha exclusivamente em um canto demarcado da mesa."</em>
+    </div>
+
+    <div class="teacher-q">
+      <strong>❓ Pergunta do Professor:</strong> <em>"Por que a escrita no dicionário não precisa de mutex, mas o checksum precisa?"</em><br>
+      <strong>👉 Resposta Rápida:</strong> <em>"Porque na escrita do dicionário os índices de cada worker são matematicamente disjuntos [p*chunk, (p+1)*chunk) — ninguém escreve na mesma posição de memória. Já o checksum_global é uma única variável de 64 bits compartilhada; se todos somassem nela ao mesmo tempo, teríamos uma condição de corrida clássica (lost updates)."</em>
+    </div>
+  </div>
+</div>
+
+<h2>📂 4. Módulo de Containerização e Cgroups — <code>/container</code></h2>
+
+<div class="folder-block">
+  <div class="folder-header">
+    <span>/container/Dockerfile &amp; run_docker.sh</span>
+    <span class="folder-tag">Isolamento &amp; Cota CFS</span>
+  </div>
+  <div class="folder-body">
+    <table class="loc-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Decisão Técnica</th>
+          <th style="width: 22%;">Arquivo &amp; Linha</th>
+          <th style="width: 53%;">O que o código faz &amp; Justificativa de Engenharia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Imagem Canônica Ubuntu</strong></td>
+          <td><span class="code-badge">Dockerfile: L5-30</span></td>
+          <td>Constrói sobre <code>ubuntu:24.04</code> com <code>g++</code>, <code>make</code> e compilação limpa <code>-O3</code> dos 3 motores C++.</td>
+        </tr>
+        <tr>
+          <td><strong>Restrição de CPU com Cgroups</strong></td>
+          <td><span class="code-badge">run_docker.sh: L54</span></td>
+          <td><code>docker run --rm --cpus="$CPUS" projeto-so2 ...</code><br>Configura <code>cpu.max</code> no escalonador Completely Fair Scheduler (CFS) do Kernel Linux.</td>
+        </tr>
+        <tr>
+          <td><strong>Plano B de Portabilidade</strong></td>
+          <td><span class="code-badge">run_docker.sh: L56-72</span></td>
+          <td>Caso o daemon Docker esteja desligado na máquina de avaliação, aciona <code>systemd-run --user --scope -p CPUQuota=... taskset</code> aplicando a mesma cota CFS nativa.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="analogy-box">
+      <strong>💡 Analogia Simples para a Banca:</strong><br>
+      <em>"A limitação por Docker (--cpus=1) é como ter 8 pedreiros trabalhando em uma obra, mas disponibilizar apenas 1 colher de pedreiro. Eles passam a maior parte do tempo revezando e passando a colher de mão em mão (trocas de contexto) do que assentando tijolos, tornando o serviço mais lento do que se houvesse um pedreiro trabalhando sozinho!"</em>
+    </div>
+
+    <div class="teacher-q">
+      <strong>❓ Pergunta do Professor:</strong> <em>"O que o Gráfico 3 prova sobre colocar 8 workers rodando sob <code>--cpus=1</code>?"</em><br>
+      <strong>👉 Resposta Rápida:</strong> <em>"Prova o fenômeno da Sobreassinatura (Overprovisioning). Sob 1 cota de CPU, não existe paralelismo físico real, apenas concorrência por tempo (time-sharing). O escalonador CFS fatia 100 ms de cota entre os 8 fluxos, gerando constantes preempções, trocas de contexto e poluição de cache, derrubando o tempo para ~9,6s (pior que os 3,86s do monothread)."</em>
+    </div>
+  </div>
+</div>
+
+<h2>📂 5. Módulo de Testes, Benchmark e Gráficos — <code>/testes</code></h2>
+
+<div class="folder-block">
+  <div class="folder-header">
+    <span>/testes/benchmark_host.sh, benchmark_dock.sh &amp; plot_graficos.py</span>
+    <span class="folder-tag">Rigor Estatístico (135 Runs)</span>
+  </div>
+  <div class="folder-body">
+    <table class="loc-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Decisão Técnica</th>
+          <th style="width: 22%;">Arquivo &amp; Linha</th>
+          <th style="width: 53%;">O que o código faz &amp; Justificativa de Engenharia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Repetibilidade Experimental</strong></td>
+          <td><span class="code-badge">benchmark_host.sh: L10-60</span></td>
+          <td>Executa 5 baterias oficiais para cada cenário no Host (45 execuções), coletando tempos brutos no formato CSV especificado.</td>
+        </tr>
+        <tr>
+          <td><strong>Automação de Cgroups</strong></td>
+          <td><span class="code-badge">benchmark_dock.sh: L10-60</span></td>
+          <td>Executa 5 repetições sob <code>--cpus=1, 2, 4</code> combinando 2, 4 e 8 workers (90 execuções), totalizando as 135 baterias oficiais.</td>
+        </tr>
+        <tr>
+          <td><strong>Consolidação Estatística</strong></td>
+          <td><span class="code-badge">plot_graficos.py: L80-140</span></td>
+          <td>Calcula média aritmética (&mu;), desvio padrão amostral (&sigma;), Speedup ($S_p = T_{seq}/T_p$) e Eficiência ($E_p = S_p/P$).</td>
+        </tr>
+        <tr>
+          <td><strong>Renderização dos 3 Gráficos</strong></td>
+          <td><span class="code-badge">plot_graficos.py: L180-450</span></td>
+          <td>Gera em PNG e SVG os 3 gráficos obrigatórios com barras de erro (&plusmn;&sigma;), paleta de alto contraste e sem sobreposição de legendas.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="analogy-box">
+      <strong>💡 Analogia Simples para a Banca:</strong><br>
+      <em>"Fazer 5 repetições e calcular o desvio padrão é como cronometrar um velocista olímpico 5 vezes em vez de uma só. Isso garante que um soluço momentâneo do sistema operacional (como um acesso a disco em segundo plano) não mascare a verdadeira velocidade do algoritmo."</em>
+    </div>
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<h2>📂 6. Módulo da Interface Visual e Servidor Web — <code>/interface</code></h2>
+
+<div class="folder-block">
+  <div class="folder-header">
+    <span>/interface/server.py &amp; static/ (app.js, style.css)</span>
+    <span class="folder-tag">Zero-Interference UI &amp; Telemetria</span>
+  </div>
+  <div class="folder-body">
+    <table class="loc-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Decisão Técnica</th>
+          <th style="width: 22%;">Arquivo &amp; Linha</th>
+          <th style="width: 53%;">O que o código faz &amp; Justificativa de Engenharia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Servidor Multithread Python</strong></td>
+          <td><span class="code-badge">server.py: L22</span></td>
+          <td><code>socketserver.ThreadingHTTPServer</code> atende requisições em threads separadas sem travar o loop de eventos.</td>
+        </tr>
+        <tr>
+          <td><strong>Execução Segura em Subprocesso</strong></td>
+          <td><span class="code-badge">server.py: L287</span></td>
+          <td><code>subprocess.run(...)</code> aciona o binário C++ nativo e suspende a thread servidora em <code>wait4()</code> no kernel, consumindo 0,0% de CPU.</td>
+        </tr>
+        <tr>
+          <td><strong>Validador Automático <code>diff</code></strong></td>
+          <td><span class="code-badge">server.py: L400-448</span></td>
+          <td>Endpoint <code>/api/diff_check</code> executa Sequencial, Processos e Threads e valida se as saídas são 100% idênticas bit a bit.</td>
+        </tr>
+        <tr>
+          <td><strong>CSS de Zero Interferência</strong></td>
+          <td><span class="code-badge">style.css: L1-150</span></td>
+          <td>Removeu <code>backdrop-filter: blur</code> e animações infinitas a 60 FPS, garantindo que o navegador não roube ciclos de CPU do C++.</td>
+        </tr>
+        <tr>
+          <td><strong>Visualização do Chunking</strong></td>
+          <td><span class="code-badge">app.js: L300-380</span></td>
+          <td>Desenha as fatias de memória <code>[start, end)</code> e mapeia qual Worker ($W_p$) gerou o token de cada letra da senha.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="analogy-box">
+      <strong>💡 Analogia Simples para a Banca:</strong><br>
+      <em>"A interface é como o velocímetro e o painel de telemetria de um carro de Fórmula 1. Ela apenas assiste e mostra o que o motor C++ está fazendo em tempo real, sem colocar o pé no freio nem atrapalhar o motorista."</em>
+    </div>
+
+    <div class="teacher-q">
+      <strong>❓ Pergunta do Professor:</strong> <em>"Ter uma interface gráfica web não prejudica o desempenho do processamento paralelo?"</em><br>
+      <strong>👉 Resposta Rápida:</strong> <em>"De forma alguma! A interface atua apenas como cliente de telemetria assíncrono via localhost. O cronômetro roda estritamente dentro do binário compilado em C++, o servidor Python fica dormindo na syscall de espera com 0% de CPU, e eliminamos efeitos gráficos de repaint para que o navegador não dispute núcleos com o cálculo."</em>
+    </div>
+  </div>
+</div>
+
+<h2>📂 7. Documentação e Entregáveis — <code>/documentacao</code></h2>
+
+<div class="folder-block">
+  <div class="folder-header">
+    <span>/documentacao/ (PDFs, HTMLs e Markdown)</span>
+    <span class="folder-tag">Entregáveis Acadêmicos Oficiais</span>
+  </div>
+  <div class="folder-body">
+    <table class="loc-table">
+      <thead>
+        <tr>
+          <th style="width: 30%;">Arquivo Gerado</th>
+          <th style="width: 25%;">Finalidade no Projeto</th>
+          <th style="width: 45%;">Conteúdo Principal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong><code>apresentacao.pdf</code></strong></td>
+          <td>Defesa Oral para a Banca</td>
+          <td>10 slides canônicos cobrindo problema, chunking, processos, threads, mutex, metodologia, 3 gráficos e conclusões.</td>
+        </tr>
+        <tr>
+          <td><strong><code>passos_e_decisoes_...pdf</code></strong></td>
+          <td>Memorial de Engenharia</td>
+          <td>Histórico cronológico, as 9 escolhas de engenharia explicadas a fundo e a investigação da causa raiz do laço.</td>
+        </tr>
+        <tr>
+          <td><strong><code>manual_uso_programa.pdf</code></strong></td>
+          <td>Manual Prático de Operação</td>
+          <td>Passo a passo de compilação, execução no terminal, uso do painel web, Docker e comandos <code>diff</code>.</td>
+        </tr>
+        <tr>
+          <td><strong><code>guia_defesa_perguntas_...pdf</code></strong></td>
+          <td>Guia de Bolso para o Aluno</td>
+          <td>Glossário completo, 22 perguntas e respostas fáceis, análise dos pontos fracos e resposta-relâmpago.</td>
+        </tr>
+        <tr>
+          <td><strong><code>atualizacoes_para_notebooklm.md</code></strong></td>
+          <td>Fonte Exclusiva de IA</td>
+          <td>Arquivo sintetizado para regenerar apresentações no NotebookLM sem conflito de números antigos.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<h2>🎯 Resumo das 4 Analogias de Ouro para a Banca</h2>
+<table class="loc-table">
+  <thead>
+    <tr>
+      <th style="width: 22%;">Conceito</th>
+      <th style="width: 38%;">Explicação Técnica</th>
+      <th style="width: 40%;">Analogia de Ouro (Fácil Entendimento)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>False Sharing</strong></td>
+      <td>Dois núcleos escrevendo em posições diferentes na mesma linha de cache de 64B (invalidação MESI).</td>
+      <td><strong>Duas pessoas escrevendo com canetas na mesma folha:</strong> elas não rabiscam o texto uma da outra, mas ficam batendo as mãos toda hora.</td>
+    </tr>
+    <tr>
+      <td><strong>Copy-on-Write (fork)</strong></td>
+      <td>O Linux duplica ponteiros de páginas como leitura; ao escrever, a MMU aloca nova página física privada.</td>
+      <td><strong>Tirar xerox de um formulário em branco:</strong> se você preencher a sua folha em casa, a folha original do seu amigo continua em branco.</td>
+    </tr>
+    <tr>
+      <td><strong>Map-Reduce no Mutex</strong></td>
+      <td>Acumulador na stack local do worker e exclusão mútua acessada 1 única vez ao final.</td>
+      <td><strong>Caixas de supermercado com cofrinho próprio:</strong> cada caixa guarda o dinheiro no seu cofre durante o dia e só vai ao cofre central 1 vez na hora de fechar a loja.</td>
+    </tr>
+    <tr>
+      <td><strong>Sobreassinatura no CFS</strong></td>
+      <td>Instanciar 8 workers disputando cota de 1 CPU (<code>--cpus=1</code>) sofrendo trocas de contexto.</td>
+      <td><strong>8 pessoas tentando usar a mesma caneta ao mesmo tempo:</strong> perde-se mais tempo passando a caneta de mão em mão do que escrevendo no papel.</td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
+

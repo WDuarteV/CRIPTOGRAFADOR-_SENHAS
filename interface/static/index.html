@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criptografador Dinâmico SO2 - Laboratório de Processamento Paralelo & Telemetria</title>
+  <meta name="description" content="Laboratório visual de Sistemas Operacionais 2: Criptografia e Descriptografia por Dicionário Dinâmico em C++ (Sequencial, Threads std::thread e Processos POSIX IPC mmap + Docker cgroups).">
+  <link rel="stylesheet" href="/static/style.css">
+  <!-- Chart.js local offline para visualização gráfica dos 3 Gráficos Obrigatórios -->
+  <script src="/static/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- CABEÇALHO -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="logo-icon">🔒</div>
+        <div>
+          <h1>Criptografador Dinâmico <span class="badge-accent">SO2 • Paralelismo & IPC</span></h1>
+          <p class="subtitle">FAETERJ Petrópolis • Sequencial (Baseline) vs. Threads (std::thread + mutex) vs. Processos (fork + mmap MAP_SHARED) vs. Docker (--cpus)</p>
+        </div>
+      </div>
+      <div class="system-status" id="system-info-bar">
+        <div class="sys-item">
+          <span class="sys-label">NÚCLEOS CPU:</span>
+          <span class="sys-val" id="cpu-cores-val">Detectando...</span>
+        </div>
+        <div class="sys-item">
+          <span class="sys-label">MEMÓRIA RAM:</span>
+          <span class="sys-val" id="ram-val">Detectando...</span>
+        </div>
+        <div class="sys-item">
+          <span class="sys-label">BASELINE SEQ (10M):</span>
+          <span class="sys-val" id="baseline-seq-val">~3.85 s</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- AVISO DE ARQUITETURA ZERO-INTERFERENCE -->
+    <div class="arch-notice">
+      <span><strong>⚡ Interface Zero-Interference (Otimizada para Paralelismo):</strong> CSS livre de <code>backdrop-filter</code> e de animações contínuas de repaint durante a execução, garantindo <strong>0% de contenção de CPU pelo navegador</strong> enquanto os motores C++ executam nos núcleos físicos.</span>
+      <span class="pill-badge ready">EntradaDic[32B] Contíguo (320 MB)</span>
+    </div>
+
+    <!-- NAVEGAÇÃO DE ABAS -->
+    <nav class="nav-tabs" role="tablist">
+      <button class="tab-btn active" id="tab-btn-crypto" onclick="switchTab('crypto')">
+        <span>⚡</span> 1. Execução Paralela, Chunking & Cifragem
+      </button>
+      <button class="tab-btn" id="tab-btn-decrypt" onclick="switchTab('decrypt')">
+        <span>🔓</span> 2. Descriptografia Reversa no Dicionário (C++)
+      </button>
+      <button class="tab-btn" id="tab-btn-benchmark" onclick="switchTab('benchmark')">
+        <span>📊</span> 3. Os 3 Gráficos Obrigatórios & Benchmark (Host vs. Docker)
+      </button>
+      <button class="tab-btn" id="tab-btn-console" onclick="switchTab('console')">
+        <span>💻</span> 4. Terminal CLI & Validação diff
+      </button>
+    </nav>
+
+    <!-- ABA 1: EXECUÇÃO PARALELA, CHUNKING & CIFRAGEM -->
+    <section id="tab-crypto" class="tab-content active">
+      <div class="grid-2col">
+        <!-- PAINEL DE CONTROLE / PARÂMETROS -->
+        <div class="card">
+          <div class="card-header">
+            <h3>⚙️ Parâmetros do Motor C++ & Paralelismo</h3>
+            <span class="pill-info">CLI Dinâmica (argc/argv)</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Paradigma de Sistema Operacional:</label>
+            <div class="radio-group" id="paradigm-selector">
+              <label class="radio-card" id="rc-sequencial">
+                <input type="radio" name="paradigm" value="sequencial" onchange="onParadigmChange('sequencial')">
+                <span class="radio-title">Sequencial</span>
+                <span class="radio-desc">Baseline 1 fluxo (T<sub>seq</sub> &ge; 2s)</span>
+              </label>
+              <label class="radio-card active" id="rc-threads">
+                <input type="radio" name="paradigm" value="threads" checked onchange="onParadigmChange('threads')">
+                <span class="radio-title">Threads (C++17)</span>
+                <span class="radio-desc">std::thread + std::mutex</span>
+              </label>
+              <label class="radio-card" id="rc-processos">
+                <input type="radio" name="paradigm" value="processos" onchange="onParadigmChange('processos')">
+                <span class="radio-title">Processos (IPC)</span>
+                <span class="radio-desc">fork() + mmap(MAP_SHARED)</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label class="form-label" for="param-workers">Workers Concorrentes (P):</label>
+              <select id="param-workers" class="form-select">
+                <option value="1">1 Worker</option>
+                <option value="2">2 Workers (Decomposição em 2 blocos)</option>
+                <option value="4" selected>4 Workers (Decomposição em 4 blocos)</option>
+                <option value="8">8 Workers (Decomposição em 8 blocos)</option>
+              </select>
+            </div>
+
+            <div class="form-group flex-1">
+              <label class="form-label" for="param-cpus">Limite de CPU (Cgroups / Docker):</label>
+              <select id="param-cpus" class="form-select">
+                <option value="ilimitado" selected>Host Físico (Todos os núcleos livres)</option>
+                <option value="4">Container / Cgroup: --cpus="4" (400%)</option>
+                <option value="2">Container / Cgroup: --cpus="2" (200%)</option>
+                <option value="1">Container / Cgroup: --cpus="1" (100% - Contenção CFS)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label class="form-label" for="param-size">Tamanho do Dicionário (N):</label>
+              <select id="param-size" class="form-select">
+                <option value="100000">100.000 (~3,2 MB - Teste Rápido)</option>
+                <option value="1000000">1.000.000 (~32 MB - Intermediário)</option>
+                <option value="10000000" selected>10.000.000 (~320 MB - Oficial Edital SO2)</option>
+              </select>
+            </div>
+
+            <div class="form-group flex-1">
+              <label class="form-label" for="param-key">Chave Secreta Modular (K):</label>
+              <input type="number" id="param-key" class="form-input" value="84729">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="param-password">Senha em Texto Claro (Alvo da Cifragem/Decifragem):</label>
+            <div class="input-with-button">
+              <input type="text" id="param-password" class="form-input text-lg" value="AvaliacaoSO2" placeholder="Digite a senha...">
+            </div>
+            <div class="quick-passwords">
+              <span class="quick-label">Cenários de Teste:</span>
+              <button type="button" class="chip-btn" onclick="setQuickPassword('AvaliacaoSO2')">AvaliacaoSO2 (Padrão)</button>
+              <button type="button" class="chip-btn" onclick="setQuickPassword('SistemasOperacionais2')">SistemasOperacionais2</button>
+              <button type="button" class="chip-btn" onclick="setQuickPassword('FAETERJ_Petropolis')">FAETERJ_Petropolis</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="param-keyword">🔑 Palavra-Chave Secreta (2ª Camada Anti-Engenharia Reversa — Obrigatória):</label>
+            <div class="input-with-button">
+              <input type="password" id="param-keyword" class="form-input" placeholder="Digite sua palavra-chave secreta (exigida para descriptografar)..." autocomplete="off">
+              <button type="button" class="btn btn-outline" onclick="toggleKeywordVisibility('param-keyword', this)" title="Mostrar/ocultar palavra-chave">👁️</button>
+            </div>
+            <small class="text-muted" style="display:block; margin-top:4px; font-size:0.78rem;">
+              Protege os tokens do dicionário com derivação SHA-256 (10.000 rodadas) + padding de 32B + tag MAC (formato <code>KW2$</code>). Sem essa palavra-chave, nem quem lê o código-fonte consegue reverter a senha.
+            </small>
+          </div>
+
+          <button id="btn-run" class="btn btn-primary btn-block btn-lg" onclick="executeCrypto()">
+            <span id="btn-run-icon">🚀</span> <span id="btn-run-text">Executar Motor C++ Paralelo & Medir Speedup</span>
+          </button>
+        </div>
+
+        <!-- PAINEL DE TELEMETRIA & SPEEDUP -->
+        <div class="card">
+          <div class="card-header">
+            <h3>📈 Telemetria de Desempenho & Speedup Paralelo</h3>
+            <span id="telemetry-status-badge" class="pill-badge ready">Pronto</span>
+          </div>
+
+          <!-- CARDS DE MÉTRICAS (6 INDICADORES DE SO2) -->
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <span class="metric-title">Tempo de Geração</span>
+              <span class="metric-val" id="metric-tger">0.000000 s</span>
+              <span class="metric-sub">Criação + 50 iter/pos + barreira</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-title">Tempo Total</span>
+              <span class="metric-val" id="metric-ttot">0.000000 s</span>
+              <span class="metric-sub">Alocação + geração + cifragem</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-title">Speedup (S<sub>p</sub> = T<sub>seq</sub>/T<sub>p</sub>)</span>
+              <span class="metric-val highlight-green" id="metric-speedup">1.00x</span>
+              <span class="metric-sub" id="metric-speedup-sub">vs. Baseline Sequencial</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-title">Eficiência (E<sub>p</sub> = S<sub>p</sub>/P)</span>
+              <span class="metric-val highlight-purple" id="metric-efficiency">100.0%</span>
+              <span class="metric-sub">Aproveitamento por núcleo</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-title">Throughput Paralelo</span>
+              <span class="metric-val" id="metric-throughput">0.00 M/s</span>
+              <span class="metric-sub">Entradas calculadas/seg</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-title">Memória Contígua</span>
+              <span class="metric-val" id="metric-mem">320.00 MB</span>
+              <span class="metric-sub" id="metric-ipc-sub">EntradaDic[32] sem malloc lock</span>
+            </div>
+          </div>
+
+          <div class="checksum-box">
+            <div>
+              <div class="checksum-label">Checksum Global de Integridade (Região Crítica Protegida por Mutex):</div>
+              <div class="checksum-val" id="metric-checksum">5000000903112875 (Aguardando execução...)</div>
+            </div>
+            <span class="pill-badge ready" id="metric-sync-primitive">std::mutex (RAII)</span>
+          </div>
+
+          <!-- RESULTADO DA SENHA CIFRADA E DECIFRADA NO C++ -->
+          <div class="result-box">
+            <div class="result-header">
+              <span class="result-title">Senha Criptografada no C++ (e Validada por Reversão Direta na Memória):</span>
+              <div class="result-actions">
+                <button class="btn btn-xs btn-outline" onclick="copyCipher()">📋 Copiar Tokens</button>
+                <button class="btn btn-xs btn-secondary" onclick="sendToDecrypt()">➔ Inspecionar Reversão</button>
+              </div>
+            </div>
+            <textarea id="result-ciphertext" class="cipher-textarea" readonly placeholder="Execute o motor C++ para gerar o dicionário de 10.000.000 posições e cifrar a senha..."></textarea>
+            <div class="mt-2" style="font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap;">
+              <span>Verificação Reversa Nativa C++: <strong class="text-emerald" id="cpp-decrypted-check">---</strong></span>
+              <span>Comando Executado: <code id="cpp-cmd-preview">./threads/app 4 10000000 84729 AvaliacaoSO2</code></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISUALIZADOR DE DECOMPOSIÇÃO DE DOMÍNIO (CHUNKING PARALELO POR WORKER) -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <h3>🧩 Decomposição de Domínio (Chunking) & Sincronização entre Workers</h3>
+          <span class="pill-info" id="chunking-summary-pill">Particionamento Disjunto [start, end) — Zero Condição de Corrida no Vetor</span>
+        </div>
+        <p class="text-muted" style="font-size: 0.86rem;">
+          O espaço de <code id="chunk-total-n">10.000.000</code> posições (320 MB) é dividido em <strong>fatias contíguas disjuntas</strong>:
+          <code>chunk = N / P</code>, <code>start = p &times; chunk</code>, <code>end = (p == P - 1) ? N : start + chunk</code>.
+          Cada trabalhador grava exclusivamente em sua fatia de memória (sem precisar de lock por índice) e acumula um <code>checksum_local</code> privativo, entrando na <strong>Região Crítica</strong> apenas 1 vez ao final para somar ao <code>checksum_global</code>.
+        </p>
+
+        <div class="chunk-visualizer">
+          <div style="display:flex; justify-content:space-between; font-size:0.76rem; color:var(--text-muted);">
+            <span>Índice Inicial: <code>0</code></span>
+            <span id="chunk-arch-desc">Espaço de Endereçamento Compartilhado</span>
+            <span>Índice Final: <code id="chunk-end-label">10.000.000</code></span>
+          </div>
+          <div class="chunk-bar-container" id="chunk-bar-container"></div>
+          <div class="worker-cards-grid" id="worker-cards-grid"></div>
+        </div>
+      </div>
+
+      <!-- TABELA DE MAPEAMENTO DOS CARACTERES COM IDENTIFICAÇÃO DO WORKER -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <h3>🔍 Mapeamento Criptográfico por Caractere & Worker Responsável</h3>
+          <span class="pill-info">Rastreabilidade Paralela do Dicionário</span>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table" id="table-breakdown">
+            <thead>
+              <tr>
+                <th>Pos</th>
+                <th>Caractere</th>
+                <th>ASCII</th>
+                <th>Fórmula Modular (ASCII &times; K mod N)</th>
+                <th>Índice no Dicionário</th>
+                <th>Worker Gerador (Fatia Paralela)</th>
+                <th>Token Cifrado (subst_valor invertido)</th>
+              </tr>
+            </thead>
+            <tbody id="table-breakdown-body">
+              <tr>
+                <td colspan="7" class="text-center text-muted">Clique em "Executar Motor C++ Paralelo" para visualizar quais workers geraram os tokens da senha.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABA 2: DESCRIPTOGRAFIA REVERSA NO DICIONÁRIO -->
+    <section id="tab-decrypt" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h3>🔓 Descriptografia Reversa & Localização de Partição Paralela</h3>
+          <span class="pill-info">Reversão Simétrica Determinística</span>
+        </div>
+        <p class="text-muted" style="font-size: 0.88rem;">
+          O sistema valida primeiro a <strong>Palavra-Chave Secreta (Camada KW2 SHA-256 + MAC)</strong> e, somente após autenticar a integridade, localiza os tokens no dicionário dinâmico (<code>K</code> e <code>N</code>) e mapeia a fatia paralela <code>[start, end)</code> de cada Worker.
+        </p>
+
+        <div class="form-group mt-3">
+          <label class="form-label" for="decrypt-input">Senha Criptografada (<code>KW2$...</code> ou tokens separados por '-'):</label>
+          <textarea id="decrypt-input" class="form-input cipher-input" rows="3" placeholder="Ex: KW2$...$..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="decrypt-keyword">🔑 Palavra-Chave Secreta (Obrigatória para Destravar KW2):</label>
+          <div class="input-with-button">
+            <input type="password" id="decrypt-keyword" class="form-input" placeholder="Informe a mesma palavra-chave usada na criptografia..." autocomplete="off">
+            <button type="button" class="btn btn-outline" onclick="toggleKeywordVisibility('decrypt-keyword', this)" title="Mostrar/ocultar palavra-chave">👁️</button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label" for="decrypt-key">Chave Secreta Modular (K):</label>
+            <input type="number" id="decrypt-key" class="form-input" value="84729">
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label" for="decrypt-size">Tamanho do Dicionário (N):</label>
+            <input type="number" id="decrypt-size" class="form-input" value="10000000">
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label" for="decrypt-workers">Particionamento de Referência (Workers P):</label>
+            <select id="decrypt-workers" class="form-select">
+              <option value="1">1 Worker (Sequencial)</option>
+              <option value="2">2 Workers</option>
+              <option value="4" selected>4 Workers</option>
+              <option value="8">8 Workers</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button class="btn btn-outline" onclick="pasteLastCipher()">
+            📋 Carregar Última Senha Cifrada
+          </button>
+          <button class="btn btn-success btn-lg" onclick="executeDecrypt()">
+            🔓 Executar Descriptografia Reversa & Mapear Partições
+          </button>
+        </div>
+
+        <!-- RESULTADO DA DESCRIPTOGRAFIA -->
+        <div id="decrypt-result-area" class="decrypt-result-box hidden">
+          <div class="decrypt-status-banner">
+            <span class="status-icon">✅</span>
+            <div>
+              <div class="banner-title">Senha Original Reconstituída com 100% de Integridade!</div>
+              <div class="banner-sub">Todos os tokens foram validados no dicionário dinâmico e associados às suas partições paralelas.</div>
+            </div>
+          </div>
+
+          <div class="decrypted-password-display">
+            <span class="label">Senha Original Descriptografada:</span>
+            <div class="password-box" id="decrypted-password-text">---</div>
+          </div>
+
+          <div class="card-header mt-4">
+            <h4>📋 Rastreamento dos Tokens Decodificados por Worker</h4>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Posição</th>
+                  <th>Token Recebido</th>
+                  <th>Valor Numérico Original (50 iter)</th>
+                  <th>Caractere Decodificado</th>
+                  <th>ASCII</th>
+                  <th>Índice no Dicionário</th>
+                  <th>Partição Paralela (Worker)</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="decrypt-steps-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABA 3: OS 3 GRÁFICOS OBRIGATÓRIOS & BENCHMARK (HOST VS DOCKER) -->
+    <section id="tab-benchmark" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h3>📊 Matriz Experimental Oficial (5 Execuções por Cenário) & Os 3 Gráficos Obrigatórios</h3>
+          <span class="pill-info">Metodologia Científica SO2: Média (&mu;), Desvio Padrão (&sigma;), Speedup (S<sub>p</sub>) e Eficiência (E<sub>p</sub>)</span>
+        </div>
+        <p class="text-muted" style="font-size: 0.88rem;">
+          Exibe os <strong>3 Gráficos Obrigatórios exigidos pelo professor</strong> no plano de trabalho:
+          <strong>Gráfico 1</strong> (Tempo de Execução: Sequencial vs. Processos vs. Threads para 1, 2, 4 e 8 workers),
+          <strong>Gráfico 2</strong> (Speedup Real S<sub>p</sub> = T<sub>seq</sub> / T<sub>p</sub> vs. Speedup Linear Ideal y = x — Lei de Amdahl) e
+          <strong>Gráfico 3</strong> (Host Físico vs. Container Docker / Cgroups sob <code>--cpus="1"</code>, <code>"2"</code> e <code>"4"</code>).
+        </p>
+
+        <div class="form-row mt-3">
+          <div class="form-group flex-1">
+            <label class="form-label" for="bench-size">Escopo de Execução ao Vivo:</label>
+            <select id="bench-size" class="form-select">
+              <option value="10000000" selected>N = 10.000.000 (Oficial SO2 — 320 MB — T_seq &ge; 2.0s)</option>
+              <option value="1000000">N = 1.000.000 (Demonstração Rápida — 32 MB)</option>
+              <option value="100000">N = 100.000 (Teste Instantâneo — 3,2 MB)</option>
+            </select>
+          </div>
+          <div class="form-group flex-1 align-end" style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-success btn-lg" style="flex:1;" onclick="loadOfficialBenchmarkResults()">
+              📂 Carregar Baterias Oficiais (5 Execuções Host + Docker)
+            </button>
+            <button id="btn-run-bench" class="btn btn-primary btn-lg" style="flex:1;" onclick="executeBenchmark()">
+              <span id="bench-btn-icon">⚡</span> Executar Bateria ao Vivo no Kernel
+            </button>
+          </div>
+        </div>
+
+        <div id="bench-progress" class="progress-container hidden">
+          <span class="progress-text">⏳ Executando binários C++ nativos sem interferência visual da interface (aguarde a conclusão)...</span>
+        </div>
+
+        <!-- OS 3 GRÁFICOS INTERATIVOS OBRIGATÓRIOS (CHART.JS) -->
+        <div class="grid-2col mt-4">
+          <div class="chart-box">
+            <h4>⏱️ Gráfico 1: Tempo de Execução (s) por Workers (1, 2, 4, 8)</h4>
+            <p>Séries: Sequencial (Baseline), Processos (fork + mmap) e Threads (std::thread). Demonstra ganho até a saturação física.</p>
+            <div class="chart-canvas-wrapper">
+              <canvas id="chart-times"></canvas>
+            </div>
+          </div>
+          <div class="chart-box">
+            <h4>🚀 Gráfico 2: Speedup Real (S<sub>p</sub>) vs. Linear Ideal (y = x)</h4>
+            <p>Lei de Amdahl: S(p) = 1 / [(1 - f) + (f / p)]. Evidencia o efeito Memory-Bound (320 MB) e overhead de sincronização.</p>
+            <div class="chart-canvas-wrapper">
+              <canvas id="chart-speedup"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-box mt-4">
+          <h4>🐳 Gráfico 3: Host Físico vs. Container Docker / Cgroups (--cpus="1", "2", "4")</h4>
+          <p>Compara Threads e Processos com 2, 4 e 8 workers sem limite no Host contra restrição de cgroups (--cpus=1, 2, 4), evidenciando a degradação por trocas de contexto no escalonador CFS sob --cpus=1.</p>
+          <div class="chart-canvas-wrapper" style="height: 360px;">
+            <canvas id="chart-docker"></canvas>
+          </div>
+        </div>
+
+        <!-- IMAGENS PNG OFICIAIS GERADAS POR /testes/plot_graficos.py -->
+        <div class="card-header mt-4">
+          <h4>🖼️ Artefatos Gráficos Oficiais Gerados em <code>/testes/resultados/*.png</code></h4>
+          <span class="pill-info">Prontos para os Slides e Entrega ZIP</span>
+        </div>
+        <div class="static-png-grid">
+          <div class="png-card">
+            <img id="img-g1" src="/results/grafico1_tempo.png" alt="Gráfico 1 - Tempo de Execução" onerror="this.style.display='none'">
+            <div class="png-card-caption">grafico1_tempo.png (Host: Seq vs. Proc vs. Threads)</div>
+          </div>
+          <div class="png-card">
+            <img id="img-g2" src="/results/grafico2_speedup.png" alt="Gráfico 2 - Speedup" onerror="this.style.display='none'">
+            <div class="png-card-caption">grafico2_speedup.png (Speedup Real vs. Ideal Linear)</div>
+          </div>
+          <div class="png-card">
+            <img id="img-g3" src="/results/grafico3_docker.png" alt="Gráfico 3 - Host vs Docker" onerror="this.style.display='none'">
+            <div class="png-card-caption">grafico3_docker.png (Host vs. Docker --cpus 1, 2, 4)</div>
+          </div>
+        </div>
+
+        <!-- TABELA DE RESULTADOS DO BENCHMARK -->
+        <div class="card-header mt-4">
+          <h4>📋 Tabela Consolidada de Resultados Experimentais (Host & Container Docker)</h4>
+          <span class="pill-info" id="bench-table-source-badge">Dados Oficiais Carregados</span>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Ambiente</th>
+                <th>Implementação</th>
+                <th>Workers (P)</th>
+                <th>Limite CPU</th>
+                <th>Execuções</th>
+                <th>Tempo Geração Médio &plusmn; DP (s)</th>
+                <th>Tempo Total Médio (s)</th>
+                <th>Speedup (S<sub>p</sub>)</th>
+                <th>Eficiência (E<sub>p</sub>)</th>
+                <th>Checksum</th>
+              </tr>
+            </thead>
+            <tbody id="bench-table-body">
+              <tr>
+                <td colspan="10" class="text-center text-muted">Carregando resultados oficiais...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABA 4: TERMINAL & LOGS C++ -->
+    <section id="tab-console" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <h3>💻 Saída Padrão dos Binários C++ & Verificação Estrita de Equivalência (diff)</h3>
+          <span class="pill-info">Checklist de Homologação do Edital</span>
+        </div>
+        <p class="text-muted" style="font-size: 0.88rem;">
+          Inspecione diretamente a saída <code>stdout</code> dos executáveis <code>./sequencial/app</code>, <code>./processos/app</code>, <code>./threads/app</code> e valide a equivalência bit a bit exigida pelo professor (<code>diff s.out p.out == 0</code>).
+        </p>
+        <div class="button-row" style="margin-bottom: 12px;">
+          <button class="btn btn-xs btn-outline" onclick="runQuickTerminalTest('sequencial', 1, 'ilimitado')">▶ ./sequencial/app 1</button>
+          <button class="btn btn-xs btn-outline" onclick="runQuickTerminalTest('threads', 4, 'ilimitado')">▶ ./threads/app 4</button>
+          <button class="btn btn-xs btn-outline" onclick="runQuickTerminalTest('processos', 4, 'ilimitado')">▶ ./processos/app 4</button>
+          <button class="btn btn-xs btn-outline" onclick="runQuickTerminalTest('threads', 8, '1')">▶ Docker --cpus="1" ./threads/app 8</button>
+          <button class="btn btn-xs btn-success" onclick="runDiffEquivalenceTest()">✔ Validar Equivalência Estrita (diff Seq vs. Proc vs. Threads)</button>
+          <button class="btn btn-xs btn-outline" onclick="clearTerminal()">🗑 Limpar</button>
+        </div>
+        <div class="terminal-window">
+          <div class="terminal-bar">
+            <span class="term-dot dot-red"></span>
+            <span class="term-dot dot-yellow"></span>
+            <span class="term-dot dot-green"></span>
+            <span class="term-title">bash — faeterj-so2@linux: /projeto</span>
+          </div>
+          <pre id="terminal-stdout" class="terminal-body">$ Aguardando comando ou execução...</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- RODAPÉ -->
+    <footer class="app-footer">
+      <p>Projeto de Sistemas Operacionais II • FAETERJ Petrópolis • Aluno: Wallace Duarte Venâncio</p>
+      <p class="footer-sub">Equivalência estrita (diff = 0) | EntradaDic[32B] Contíguo (320 MB) | POSIX IPC mmap(MAP_SHARED) + pthread_mutex_t | std::thread + std::mutex | Docker --cpus (cgroups CFS)</p>
+    </footer>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

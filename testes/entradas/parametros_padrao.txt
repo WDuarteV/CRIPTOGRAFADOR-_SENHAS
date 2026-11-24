@@ -1,0 +1,8 @@
+# ==============================================================================
+# Conjunto Oficial de Entradas de Teste - Sistemas Operacionais 2 (FAETERJ)
+# Formato: <nome_cenario>|<tamanho_dicionario>|<chave_secreta>|<senha_alvo>
+# ==============================================================================
+oficial_so2|10000000|84729|AvaliacaoSO2
+carga_media|1000000|84729|SistemasOperacionais2
+carga_rapida|100000|84729|TesteRapidoFAETERJ
+

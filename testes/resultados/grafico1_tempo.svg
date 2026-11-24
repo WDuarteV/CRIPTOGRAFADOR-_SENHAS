@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" style="background:#0b0f19;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<rect width="1200" height="720" fill="#0b0f19"/>
+<text x="600.0" y="46" text-anchor="middle" fill="#f8fafc" font-size="24" font-weight="700">Gráfico 1: Tempo Médio de Execução no Host (N = 10.000.000)</text>
+<text x="600.0" y="76" text-anchor="middle" fill="#94a3b8" font-size="15">Comparativo entre Baseline Sequencial, Processos (fork + mmap) e Threads (std::thread) • Média ± DP (5 execuções)</text>
+<line x1="110" y1="610.0" x2="1140" y2="610.0" stroke="#1e293b" stroke-width="1.5"/>
+<text x="96" y="615.0" text-anchor="end" fill="#94a3b8" font-size="14">0.00 s</text>
+<line x1="110" y1="526.7" x2="1140" y2="526.7" stroke="#1e293b" stroke-width="1.5"/>
+<text x="96" y="531.7" text-anchor="end" fill="#94a3b8" font-size="14">0.85 s</text>
+<line x1="110" y1="443.3" x2="1140" y2="443.3" stroke="#1e293b" stroke-width="1.5"/>
+<text x="96" y="448.3" text-anchor="end" fill="#94a3b8" font-size="14">1.71 s</text>
+<line x1="110" y1="360.0" x2="1140" y2="360.0" stroke="#1e293b" stroke-width="1.5"/>
+<text x="96" y="365.0" text-anchor="end" fill="#94a3b8" font-size="14">2.56 s</text>
+<line x1="110" y1="276.7" x2="1140" y2="276.7" stroke="#1e293b" stroke-width="1.5"/>
+<text x="96" y="281.7" text-anchor="end" fill="#94a3b8" font-size="14">3.41 s</text>
+<line x1="110" y1="193.3" x2="1140" y2="193.3" stroke="#1e293b" stroke-width="1.5"/>
+<text x="96" y="198.3" text-anchor="end" fill="#94a3b8" font-size="14">4.27 s</text>
+<line x1="110" y1="110.0" x2="1140" y2="110.0" stroke="#1e293b" stroke-width="1.5"/>
+<text x="96" y="115.0" text-anchor="end" fill="#94a3b8" font-size="14">5.12 s</text>
+<line x1="110" y1="110" x2="110" y2="610" stroke="#475569" stroke-width="2"/>
+<line x1="110" y1="610" x2="1140" y2="610" stroke="#475569" stroke-width="2"/>
+<text x="36" y="360.0" transform="rotate(-90 36,360.0)" text-anchor="middle" fill="#cbd5e1" font-size="16" font-weight="600">Tempo de Geração do Dicionário (segundos)</text>
+<text x="625.0" y="695" text-anchor="middle" fill="#cbd5e1" font-size="16" font-weight="600">Quantidade de Trabalhadores (Workers P)</text>
+<line x1="110" y1="232.7" x2="1140" y2="232.7" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="8,6"/>
+<rect x="850" y="194.7" width="284" height="24" rx="4" fill="#0b0f19" opacity="0.88"/>
+<text x="1130" y="211.7" text-anchor="end" fill="#fbbf24" font-size="13" font-weight="700">Baseline Sequencial (T_seq = 3.862s)</text>
+<text x="238.8" y="644" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700">1 Worker</text>
+<rect x="149.1" y="232.7" width="56" height="377.3" rx="5" fill="#f59e0b" opacity="0.9"/>
+<text x="177.1" y="222.7" text-anchor="middle" fill="#f8fafc" font-size="13" font-weight="700">3.86s</text>
+<rect x="210.8" y="186.3" width="56" height="423.7" rx="5" fill="#a855f7" opacity="0.9"/>
+<line x1="238.8" y1="164.4" x2="238.8" y2="208.2" stroke="#f8fafc" stroke-width="2"/>
+<line x1="230.8" y1="164.4" x2="246.8" y2="164.4" stroke="#f8fafc" stroke-width="2"/>
+<line x1="230.8" y1="208.2" x2="246.8" y2="208.2" stroke="#f8fafc" stroke-width="2"/>
+<text x="238.8" y="176.3" text-anchor="middle" fill="#f8fafc" font-size="13" font-weight="700">4.34s</text>
+<rect x="272.4" y="247.1" width="56" height="362.9" rx="5" fill="#0ea5e9" opacity="0.9"/>
+<line x1="300.4" y1="225.6" x2="300.4" y2="268.6" stroke="#f8fafc" stroke-width="2"/>
+<line x1="292.4" y1="225.6" x2="308.4" y2="225.6" stroke="#f8fafc" stroke-width="2"/>
+<line x1="292.4" y1="268.6" x2="308.4" y2="268.6" stroke="#f8fafc" stroke-width="2"/>
+<text x="300.4" y="237.1" text-anchor="middle" fill="#f8fafc" font-size="13" font-weight="700">3.71s</text>
+<text x="496.2" y="644" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700">2 Workers</text>
+<rect x="406.6" y="232.7" width="56" height="377.3" rx="5" fill="#f59e0b" opacity="0.9"/>
+<text x="434.6" y="222.7" text-anchor="middle" fill="#f8fafc" font-size="13" font-weight="700">3.86s</text>
+<rect x="468.2" y="365.1" width="56" height="244.9" rx="5" fill="#a855f7" opacity="0.9"/>
+<line x1="496.2" y1="338.5" x2="496.2" y2="391.7" stroke="#f8fafc" stroke-width="2"/>
+<line x1="488.2" y1="338.5" x2="504.2" y2="338.5" stroke="#f8fafc" stroke-width="2"/>
+<line x1="488.2" y1="391.7" x2="504.2" y2="391.7" stroke="#f8fafc" stroke-width="2"/>
+<text x="496.2" y="355.1" text-anchor="middle" fill="#f8fafc" font-size="13" font-weight="700">2.51s</text>
+<rect x="529.9" y="376.0" width="56" height="234.0" rx="5" fill="#0ea5e9" opacity="0.9"/>
+<line x1="557.9" y1="371.1" x2="557.9" y2="380.9" stroke="#f8fafc" stroke-width="2"/>
+<line x1="549.9" y1="371.1" x2="565.9" y2="371.1" stroke="#f8fafc" stroke-width="2"/>
+<line x1="549.9" y1="380.9" x2="565.9" y2="380.9" stroke="#f8fafc" stroke-width="2"/>
+<text x="557.9" y="366.0" text-anchor="middle" fill="#f8fafc" font-size="13" font-weight="700">2.40s</text>
+<text x="753.8" y="644" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700">4 Workers</text>
+<rect x="664.1" y="232.7" width="56" height="377.3" rx="5" fill="#f59e0b" opacity="0.9"/>
+<text x="692.1" y="222.7" text-anchor="middle" fill="#f8fafc" font-size="13" font-weight="700">3.86s</text>
+<rect x="725.8" y="433.1" width="56" height="176.9" rx="5" fill="#a855f7" opacity="0.9"/>
+<line x1="753.8" y1="423.9" x2="753.8" y2="442.3" stroke="#f8fafc" stroke-width="2"/>
+<line x1="745.8" y1="423.9" x2="761.8" y2="423.9" stroke="#f8fafc" stroke-width="2"/>
+<line x1="745.8" y1="442.3" x2="761.8" y2="442.3" stroke="#f8fafc" stroke-width="2"/>
+<text x="753.8" y="423.1" text-anchor="middle" fill="#f8fafc" font-size="13" font-weight="700">1.81s</text>
+<rect x="787.4" y="437.4" width="56" height="172.6" rx="5" fill="#0ea5e9" opacity="0.9"/>
+<line x1="815.4" y1="431.2" x2="815.4" y2="443.6" stroke="#f8fafc" stroke-width="2"/>
+<line x1="807.4" y1="431.2" x2="823.4" y2="431.2" stroke="#f8fafc" stroke-width="2"/>
+<line x1="807.4" y1="443.6" x2="823.4" y2="443.6" stroke="#f8fafc" stroke-width="2"/>
+<text x="815.4" y="427.4" text-anchor="middle" fill="#f8fafc" font-size="13" font-weight="700">1.77s</text>
+<text x="1011.2" y="644" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700">8 Workers</text>
+<rect x="921.6" y="232.7" width="56" height="377.3" rx="5" fill="#f59e0b" opacity="0.9"/>
+<text x="949.6" y="222.7" text-anchor="middle" fill="#f8fafc" font-size="13" font-weight="700">3.86s</text>
+<rect x="983.2" y="496.2" width="56" height="113.8" rx="5" fill="#a855f7" opacity="0.9"/>
+<line x1="1011.2" y1="494.8" x2="1011.2" y2="497.6" stroke="#f8fafc" stroke-width="2"/>
+<line x1="1003.2" y1="494.8" x2="1019.2" y2="494.8" stroke="#f8fafc" stroke-width="2"/>
+<line x1="1003.2" y1="497.6" x2="1019.2" y2="497.6" stroke="#f8fafc" stroke-width="2"/>
+<text x="1011.2" y="486.2" text-anchor="middle" fill="#f8fafc" font-size="13" font-weight="700">1.16s</text>
+<rect x="1044.8" y="500.4" width="56" height="109.6" rx="5" fill="#0ea5e9" opacity="0.9"/>
+<line x1="1072.8" y1="499.4" x2="1072.8" y2="501.4" stroke="#f8fafc" stroke-width="2"/>
+<line x1="1064.8" y1="499.4" x2="1080.8" y2="499.4" stroke="#f8fafc" stroke-width="2"/>
+<line x1="1064.8" y1="501.4" x2="1080.8" y2="501.4" stroke="#f8fafc" stroke-width="2"/>
+<text x="1072.8" y="490.4" text-anchor="middle" fill="#f8fafc" font-size="13" font-weight="700">1.12s</text>
+<rect x="770" y="124" width="360" height="96" rx="8" fill="#111827" stroke="#334155"/>
+<rect x="786" y="136" width="16" height="16" rx="3" fill="#f59e0b"/>
+<text x="812" y="149" fill="#e2e8f0" font-size="14" font-weight="600">Sequencial (Baseline)</text>
+<rect x="786" y="164" width="16" height="16" rx="3" fill="#a855f7"/>
+<text x="812" y="177" fill="#e2e8f0" font-size="14" font-weight="600">Processos (fork + mmap MAP_SHARED)</text>
+<rect x="786" y="192" width="16" height="16" rx="3" fill="#0ea5e9"/>
+<text x="812" y="205" fill="#e2e8f0" font-size="14" font-weight="600">Threads (std::thread + std::mutex)</text>
+</svg>

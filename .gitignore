@@ -1,0 +1,18 @@
+# Binários C++ compilados e objetos
+sequencial/app
+processos/app
+threads/app
+*.o
+*.out
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Pacotes e arquivos temporários
+criptografador_so2_programa.zip
+*.tmp
+*.log
+.DS_Store
+

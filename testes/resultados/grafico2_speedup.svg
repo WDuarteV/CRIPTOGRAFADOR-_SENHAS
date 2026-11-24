@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" style="background:#0b0f19;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<rect width="1200" height="720" fill="#0b0f19"/>
+<text x="600.0" y="46" text-anchor="middle" fill="#f8fafc" font-size="24" font-weight="700">Gráfico 2: Curva de Speedup (Sp = T_seq / T_p) vs. Linear Ideal (Lei de Amdahl)</text>
+<text x="600.0" y="76" text-anchor="middle" fill="#94a3b8" font-size="15">Análise de Escalabilidade Real e Limite de Saturação de Barramento de Memória (320 MB)</text>
+<line x1="110" y1="610.0" x2="1140" y2="610.0" stroke="#1e293b" stroke-width="1.5"/>
+<text x="96" y="615.0" text-anchor="end" fill="#94a3b8" font-size="14">0.0x</text>
+<line x1="110" y1="551.2" x2="1140" y2="551.2" stroke="#1e293b" stroke-width="1.5"/>
+<text x="96" y="556.2" text-anchor="end" fill="#94a3b8" font-size="14">1.0x</text>
+<line x1="110" y1="492.4" x2="1140" y2="492.4" stroke="#1e293b" stroke-width="1.5"/>
+<text x="96" y="497.4" text-anchor="end" fill="#94a3b8" font-size="14">2.0x</text>
+<line x1="110" y1="433.5" x2="1140" y2="433.5" stroke="#1e293b" stroke-width="1.5"/>
+<text x="96" y="438.5" text-anchor="end" fill="#94a3b8" font-size="14">3.0x</text>
+<line x1="110" y1="374.7" x2="1140" y2="374.7" stroke="#1e293b" stroke-width="1.5"/>
+<text x="96" y="379.7" text-anchor="end" fill="#94a3b8" font-size="14">4.0x</text>
+<line x1="110" y1="315.9" x2="1140" y2="315.9" stroke="#1e293b" stroke-width="1.5"/>
+<text x="96" y="320.9" text-anchor="end" fill="#94a3b8" font-size="14">5.0x</text>
+<line x1="110" y1="257.1" x2="1140" y2="257.1" stroke="#1e293b" stroke-width="1.5"/>
+<text x="96" y="262.1" text-anchor="end" fill="#94a3b8" font-size="14">6.0x</text>
+<line x1="110" y1="198.2" x2="1140" y2="198.2" stroke="#1e293b" stroke-width="1.5"/>
+<text x="96" y="203.2" text-anchor="end" fill="#94a3b8" font-size="14">7.0x</text>
+<line x1="110" y1="139.4" x2="1140" y2="139.4" stroke="#1e293b" stroke-width="1.5"/>
+<text x="96" y="144.4" text-anchor="end" fill="#94a3b8" font-size="14">8.0x</text>
+<line x1="110" y1="110" x2="110" y2="610" stroke="#475569" stroke-width="2"/>
+<line x1="110" y1="610" x2="1140" y2="610" stroke="#475569" stroke-width="2"/>
+<text x="36" y="360.0" transform="rotate(-90 36,360.0)" text-anchor="middle" fill="#cbd5e1" font-size="16" font-weight="600">Speedup Acelerado (Sp = T_seq / T_p)</text>
+<text x="625.0" y="695" text-anchor="middle" fill="#cbd5e1" font-size="16" font-weight="600">Quantidade de Trabalhadores (Workers P)</text>
+<line x1="110.0" y1="110" x2="110.0" y2="610" stroke="#1e293b" stroke-width="1" stroke-dasharray="4,4"/>
+<text x="110.0" y="644" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700">1 Worker</text>
+<line x1="453.3" y1="110" x2="453.3" y2="610" stroke="#1e293b" stroke-width="1" stroke-dasharray="4,4"/>
+<text x="453.3" y="644" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700">2 Workers</text>
+<line x1="796.7" y1="110" x2="796.7" y2="610" stroke="#1e293b" stroke-width="1" stroke-dasharray="4,4"/>
+<text x="796.7" y="644" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700">4 Workers</text>
+<line x1="1140.0" y1="110" x2="1140.0" y2="610" stroke="#1e293b" stroke-width="1" stroke-dasharray="4,4"/>
+<text x="1140.0" y="644" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700">8 Workers</text>
+<polyline fill="none" stroke="#64748b" stroke-width="3.5" stroke-dasharray="8,6" points="110.0,551.2 453.3,492.4 796.7,374.7 1140.0,139.4"/>
+<circle cx="110.0" cy="551.2" r="6.5" fill="#64748b" stroke="#0b0f19" stroke-width="2"/>
+<text x="110.0" y="535.2" text-anchor="middle" fill="#64748b" font-size="14" font-weight="700">1.00x</text>
+<circle cx="453.3" cy="492.4" r="6.5" fill="#64748b" stroke="#0b0f19" stroke-width="2"/>
+<text x="453.3" y="476.4" text-anchor="middle" fill="#64748b" font-size="14" font-weight="700">2.00x</text>
+<circle cx="796.7" cy="374.7" r="6.5" fill="#64748b" stroke="#0b0f19" stroke-width="2"/>
+<text x="796.7" y="358.7" text-anchor="middle" fill="#64748b" font-size="14" font-weight="700">4.00x</text>
+<circle cx="1140.0" cy="139.4" r="6.5" fill="#64748b" stroke="#0b0f19" stroke-width="2"/>
+<text x="1140.0" y="123.4" text-anchor="middle" fill="#64748b" font-size="14" font-weight="700">8.00x</text>
+<polyline fill="none" stroke="#10b981" stroke-width="3.5"  points="110.0,548.8 453.3,515.2 796.7,481.4 1140.0,407.5"/>
+<circle cx="110.0" cy="548.8" r="6.5" fill="#10b981" stroke="#0b0f19" stroke-width="2"/>
+<text x="110.0" y="536.8" text-anchor="middle" fill="#10b981" font-size="14" font-weight="700">1.04x</text>
+<circle cx="453.3" cy="515.2" r="6.5" fill="#10b981" stroke="#0b0f19" stroke-width="2"/>
+<text x="453.3" y="503.2" text-anchor="middle" fill="#10b981" font-size="14" font-weight="700">1.61x</text>
+<circle cx="796.7" cy="481.4" r="6.5" fill="#10b981" stroke="#0b0f19" stroke-width="2"/>
+<text x="796.7" y="469.4" text-anchor="middle" fill="#10b981" font-size="14" font-weight="700">2.19x</text>
+<circle cx="1140.0" cy="407.5" r="6.5" fill="#10b981" stroke="#0b0f19" stroke-width="2"/>
+<text x="1140.0" y="395.5" text-anchor="middle" fill="#10b981" font-size="14" font-weight="700">3.44x</text>
+<polyline fill="none" stroke="#a855f7" stroke-width="3.5"  points="110.0,557.6 453.3,519.4 796.7,484.6 1140.0,415.0"/>
+<circle cx="110.0" cy="557.6" r="6.5" fill="#a855f7" stroke="#0b0f19" stroke-width="2"/>
+<text x="110.0" y="581.6" text-anchor="middle" fill="#a855f7" font-size="14" font-weight="700">0.89x</text>
+<circle cx="453.3" cy="519.4" r="6.5" fill="#a855f7" stroke="#0b0f19" stroke-width="2"/>
+<text x="453.3" y="543.4" text-anchor="middle" fill="#a855f7" font-size="14" font-weight="700">1.54x</text>
+<circle cx="796.7" cy="484.6" r="6.5" fill="#a855f7" stroke="#0b0f19" stroke-width="2"/>
+<text x="796.7" y="508.6" text-anchor="middle" fill="#a855f7" font-size="14" font-weight="700">2.13x</text>
+<circle cx="1140.0" cy="415.0" r="6.5" fill="#a855f7" stroke="#0b0f19" stroke-width="2"/>
+<text x="1140.0" y="439.0" text-anchor="middle" fill="#a855f7" font-size="14" font-weight="700">3.32x</text>
+<rect x="134" y="130" width="370" height="98" rx="8" fill="#111827" stroke="#334155"/>
+<rect x="150" y="142" width="16" height="16" rx="3" fill="#64748b"/>
+<text x="176" y="155" fill="#e2e8f0" font-size="14" font-weight="600">Speedup Linear Ideal (y = P)</text>
+<rect x="150" y="170" width="16" height="16" rx="3" fill="#10b981"/>
+<text x="176" y="183" fill="#e2e8f0" font-size="14" font-weight="600">Speedup Real — Threads (std::thread)</text>
+<rect x="150" y="198" width="16" height="16" rx="3" fill="#a855f7"/>
+<text x="176" y="211" fill="#e2e8f0" font-size="14" font-weight="600">Speedup Real — Processos (fork + mmap)</text>
+</svg>
